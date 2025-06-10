@@ -1,7 +1,7 @@
-import { faker } from "@faker-js/faker";
-import { ICustomer } from "types/customer.types";
-import { COUNTRIES } from "data/customers/countries.data";
-import { getRandromEnumValue } from "utils/enum.utils";
+import { faker } from '@faker-js/faker';
+import { ICustomer } from 'types/customer.types';
+import { COUNTRIES } from 'data/customers/countries.data';
+import { getRandromEnumValue } from 'utils/enum.utils';
 
 export function generateCustomerData(params?: Partial<ICustomer>): ICustomer {
   return {

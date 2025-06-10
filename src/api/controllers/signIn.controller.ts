@@ -1,8 +1,8 @@
-import { APIRequestContext } from "@playwright/test";
-import { RequestApi } from "api/apiClients/request";
-import { apiConfig } from "config/api-config";
-import { IRequestOptions } from "types/api.types";
-import { IAPICredentials, ILoginFromResponse } from "types/signIn.types";
+import { APIRequestContext } from '@playwright/test';
+import { RequestApi } from 'api/apiClients/request';
+import { apiConfig } from 'config/api-config';
+import { IRequestOptions } from 'types/api.types';
+import { IAPICredentials, ILoginFromResponse } from 'types/signIn.types';
 
 export class SignInController {
   private request: RequestApi;
@@ -15,10 +15,10 @@ export class SignInController {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
       url: apiConfig.ENDPOINTS.LOGIN,
-      method: "post",
+      method: 'post',
       data: body,
       headers: {
-        "content-type": "application/json",
+        'content-type': 'application/json',
       },
     };
     return await this.request.send<ILoginFromResponse>(options);

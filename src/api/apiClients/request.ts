@@ -1,20 +1,21 @@
-import test, { APIRequestContext, APIResponse, request } from "@playwright/test";
-import _ from "lodash";
-import { IRequestOptions, IResponse } from "types/api.types";
+import test, { APIRequestContext, APIResponse } from '@playwright/test';
+import _ from 'lodash';
+import { IRequestOptions, IResponse } from 'types/api.types';
 
 export class RequestApi {
   constructor(private requestContext: APIRequestContext) {}
   private response: APIResponse | undefined;
   private testInfo = test.info;
 
-  async send<T extends Object | null>(options: IRequestOptions): Promise<IResponse<T>> {
+  async send<T extends object | null>(options: IRequestOptions): Promise<IResponse<T>> {
     try {
       this.attachRequest(options);
       this.response = await this.requestContext.fetch(
         options.baseURL + options.url,
-        _.omit(options, ["baseURL", "url"])
+        _.omit(options, ['baseURL', 'url']),
       );
-      if (this.response.status() >= 500) throw new Error("Request failed with status " + this.response.status());
+      if (this.response.status() >= 500)
+        throw new Error('Request failed with status ' + this.response.status());
       const result = await this.transformResponse();
       this.attachResponse(options, result);
       return result;
@@ -26,8 +27,8 @@ export class RequestApi {
 
   async transformResponse() {
     let body;
-    const contentType = this.response!.headers()["content-type"] || "";
-    if (contentType.includes("application/json")) {
+    const contentType = this.response!.headers()['content-type'] || '';
+    if (contentType.includes('application/json')) {
       body = await this.response!.json();
     } else {
       body = await this.response!.text();
@@ -48,23 +49,29 @@ export class RequestApi {
           ...(options.data && { body: options.data }),
         },
         null,
-        2
+        2,
       ),
-      contentType: "application/json",
+      contentType: 'application/json',
     });
   }
 
-  private attachResponse<T extends object | null>(options: IRequestOptions, response: IResponse<T>): void {
-    this.testInfo().attach(`Response ${response.status} ${options.method.toUpperCase()} ${options.url}`, {
-      body: JSON.stringify(
-        {
-          headers: response.headers,
-          body: response.body,
-        },
-        null,
-        2
-      ),
-      contentType: "application/json",
-    });
+  private attachResponse<T extends object | null>(
+    options: IRequestOptions,
+    response: IResponse<T>,
+  ): void {
+    this.testInfo().attach(
+      `Response ${response.status} ${options.method.toUpperCase()} ${options.url}`,
+      {
+        body: JSON.stringify(
+          {
+            headers: response.headers,
+            body: response.body,
+          },
+          null,
+          2,
+        ),
+        contentType: 'application/json',
+      },
+    );
   }
 }

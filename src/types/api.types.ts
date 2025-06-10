@@ -1,7 +1,7 @@
 export interface IRequestOptions {
   baseURL: string;
   url: string;
-  method: "get" | "post" | "put" | "delete";
+  method: 'get' | 'post' | 'put' | 'delete';
   data?: object;
   headers?: Record<string, string>;
 }
@@ -17,6 +17,6 @@ export interface IResponseFields {
   ErrorMessage: string | null;
 }
 
-export type sortDirection = "asc" | "desc";
+export type sortDirection = 'asc' | 'desc';
 
-export type customersSortField = "createdOn" | "email" | "name" | "country";
+export type customersSortField = 'createdOn' | 'email' | 'name' | 'country';

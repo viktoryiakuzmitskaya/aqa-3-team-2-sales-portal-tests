@@ -1,5 +1,5 @@
-import { COUNTRIES } from "data/customers/countries.data";
-import { customersSortField, IResponseFields, sortDirection } from "./api.types";
+import { COUNTRIES } from 'data/customers/countries.data';
+import { customersSortField, IResponseFields, sortDirection } from './api.types';
 
 export interface ICustomer {
   email: string;
@@ -30,4 +30,4 @@ export interface ICustomersResponse extends IResponseFields {
   };
 }
 
-export type ICustomerInTable = Pick<ICustomer, "email" | "country" | "name">;
+export type ICustomerInTable = Pick<ICustomer, 'email' | 'country' | 'name'>;

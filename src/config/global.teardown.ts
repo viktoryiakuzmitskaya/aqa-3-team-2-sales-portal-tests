@@ -1,4 +1,4 @@
-import { sendNotification } from "utils/notifications/telegram";
+import { sendNotification } from 'utils/notifications/telegram';
 
 export default async function () {
   await sendNotification(`Test run finished!
