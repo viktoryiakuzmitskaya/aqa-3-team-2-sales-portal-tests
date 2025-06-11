@@ -33,29 +33,29 @@ export default defineConfig({
   },
   projects: [
     {
-      name: "setup",
+      name: 'setup',
       use: {
-        ...devices["Desktop Chrome"],
+        ...devices['Desktop Chrome'],
         headless: true,
       },
-      testDir: "src/ui/tests/SalesPortal/",
+      testDir: 'src/ui/tests/SalesPortal/',
       testMatch: /.*\.setup\.ts/,
     },
     {
-      name: "sales-portal-api",
+      name: 'sales-portal-api',
       use: {
-        ...devices["Desktop Chrome"],
+        ...devices['Desktop Chrome'],
       },
-      testDir: "./src/api/tests",
+      testDir: './src/api/tests',
     },
     {
-      name: "sales-portal-ui",
+      name: 'sales-portal-ui',
       use: {
-        ...devices["Desktop Chrome"],
-        storageState: "src/.auth/user.json",
+        ...devices['Desktop Chrome'],
+        storageState: 'src/.auth/user.json',
       },
-      dependencies: ["setup"],
-      testDir: "./src/ui/tests",
+      dependencies: ['setup'],
+      testDir: './src/ui/tests',
     },
-  ]
+  ],
 });
