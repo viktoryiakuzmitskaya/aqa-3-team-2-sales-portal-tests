@@ -22,7 +22,7 @@
   "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^9.28.0",
-    "@playwright/test": "^1.52.0",
+    "@playwright/test": "^1.53.0",
     "@types/ajv": "^1.0.4",
     "@types/dotenv": "^8.2.3",
     "@types/lodash": "^4.17.17",
