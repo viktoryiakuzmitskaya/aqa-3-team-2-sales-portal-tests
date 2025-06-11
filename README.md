@@ -103,3 +103,33 @@ Husky will automatically run lint and formatting checks before each commit.
 - Base URLs and credentials are managed in `src/config/environment.ts`, `src/config/api-config.ts`, and `.env` files.
 
 ---
+
+## Running in Docker
+
+You can run tests inside Docker containers for a consistent environment.
+
+### Prerequisites
+
+- [Docker](https://www.docker.com/) installed
+
+### Usage
+
+- **Build the Docker image:**
+  ```sh
+  docker-compose build
+  ```
+
+- **Run all tests in a container:**
+  ```sh
+  docker-compose run --rm playwright
+  ```
+
+- **Run only API tests in a container:**
+  ```sh
+  docker-compose run --rm playwright-api
+  ```
+
+This uses the provided `Dockerfile` and `docker-compose.yml` to build an image based on the official Playwright image, install dependencies, and run your tests.  
+Project files are mounted into the container, so changes on your host are reflected inside the container.
+
+---
