@@ -46,6 +46,20 @@ export class CustomersController {
   async getAll(token: string, params?: Record<string, string>) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
+      url: apiConfig.ENDPOINTS.CUSTOMERS_ALL + (params ? convertRequestParams(params) : ''),
+      method: 'get',
+      headers: {
+        'content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    return await this.request.send<ICustomersResponse>(options);
+  }
+
+  @logStep()
+  async getCustomers(token: string, params?: Record<string, string>) {
+    const options: IRequestOptions = {
+      baseURL: apiConfig.BASE_URL,
       url: apiConfig.ENDPOINTS.CUSTOMERS + (params ? convertRequestParams(params) : ''),
       method: 'get',
       headers: {
