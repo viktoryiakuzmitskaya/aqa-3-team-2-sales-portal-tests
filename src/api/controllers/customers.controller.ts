@@ -43,7 +43,7 @@ export class CustomersController {
   }
 
   @logStep()
-  async getAll(token: string, params?: Record<string, string>) {
+  async getSorted(token: string, params?: Record<string, string>) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
       url: apiConfig.ENDPOINTS.CUSTOMERS_ALL + (params ? convertRequestParams(params) : ''),
@@ -57,7 +57,7 @@ export class CustomersController {
   }
 
   @logStep()
-  async getCustomers(token: string, params?: Record<string, string>) {
+  async getAll(token: string, params?: Record<string, string>) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
       url: apiConfig.ENDPOINTS.CUSTOMERS + (params ? convertRequestParams(params) : ''),
