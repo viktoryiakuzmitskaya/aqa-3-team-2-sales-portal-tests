@@ -1,77 +1,100 @@
-import test, { APIRequestContext, APIResponse } from '@playwright/test';
-import _ from 'lodash';
-import { IRequestOptions, IResponse } from 'types/api.types';
+import { APIRequestContext } from '@playwright/test';
+import { RequestApi } from 'api/apiClients/request';
+import { apiConfig } from 'config/api-config';
+import { IRequestOptions } from 'types/api.types';
+import { ICustomer, ICustomerResponse, ICustomersResponse } from 'types/customer.types';
+import { logStep } from 'utils/reporter.utils';
+import { convertRequestParams } from 'utils/requestParams';
 
-export class RequestApi {
-  constructor(private requestContext: APIRequestContext) {}
-  private response: APIResponse | undefined;
-  private testInfo = test.info;
+export class CustomersController {
+  private request: RequestApi;
 
-  async send<T extends object | null>(options: IRequestOptions): Promise<IResponse<T>> {
-    try {
-      this.attachRequest(options);
-      this.response = await this.requestContext.fetch(
-        options.baseURL + options.url,
-        _.omit(options, ['baseURL', 'url']),
-      );
-      if (this.response.status() >= 500)
-        throw new Error('Request failed with status ' + this.response.status());
-      const result = await this.transformResponse();
-      this.attachResponse(options, result);
-      return result;
-    } catch (err) {
-      console.log((err as Error).message);
-      throw err;
-    }
+  constructor(context: APIRequestContext) {
+    this.request = new RequestApi(context);
   }
 
-  async transformResponse() {
-    let body;
-    const contentType = this.response!.headers()['content-type'] || '';
-    if (contentType.includes('application/json')) {
-      body = await this.response!.json();
-    } else {
-      body = await this.response!.text();
-    }
-
-    return {
-      status: this.response!.status(),
-      body,
-      headers: this.response!.headers(),
-    };
-  }
-
-  private attachRequest(options: IRequestOptions): void {
-    this.testInfo().attach(`Request ${options.method.toUpperCase()} ${options.url}`, {
-      body: JSON.stringify(
-        {
-          headers: options.headers,
-          ...(options.data && { body: options.data }),
-        },
-        null,
-        2,
-      ),
-      contentType: 'application/json',
-    });
-  }
-
-  private attachResponse<T extends object | null>(
-    options: IRequestOptions,
-    response: IResponse<T>,
-  ): void {
-    this.testInfo().attach(
-      `Response ${response.status} ${options.method.toUpperCase()} ${options.url}`,
-      {
-        body: JSON.stringify(
-          {
-            headers: response.headers,
-            body: response.body,
-          },
-          null,
-          2,
-        ),
-        contentType: 'application/json',
+  @logStep()
+  async create(body: ICustomer, token: string) {
+    const options: IRequestOptions = {
+      baseURL: apiConfig.BASE_URL,
+      url: apiConfig.ENDPOINTS.CUSTOMERS,
+      method: 'post',
+      data: body,
+      headers: {
+        'content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
-    );
+    };
+    return await this.request.send<ICustomerResponse>(options);
+  }
+
+  @logStep()
+  async getById(id: string, token: string) {
+    const options: IRequestOptions = {
+      baseURL: apiConfig.BASE_URL,
+      url: apiConfig.ENDPOINTS.CUSTOMER_BY_ID(id),
+      method: 'get',
+      headers: {
+        'content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    return await this.request.send<ICustomerResponse>(options);
+  }
+
+  @logStep()
+  async getSorted(token: string, params?: Record<string, string>) {
+    const options: IRequestOptions = {
+      baseURL: apiConfig.BASE_URL,
+      url: apiConfig.ENDPOINTS.CUSTOMERS_ALL + (params ? convertRequestParams(params) : ''),
+      method: 'get',
+      headers: {
+        'content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    return await this.request.send<ICustomersResponse>(options);
+  }
+
+  @logStep()
+  async getAll(token: string, params?: Record<string, string>) {
+    const options: IRequestOptions = {
+      baseURL: apiConfig.BASE_URL,
+      url: apiConfig.ENDPOINTS.CUSTOMERS + (params ? convertRequestParams(params) : ''),
+      method: 'get',
+      headers: {
+        'content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    return await this.request.send<ICustomersResponse>(options);
+  }
+
+  @logStep()
+  async update(id: string, body: ICustomer, token: string) {
+    const options: IRequestOptions = {
+      baseURL: apiConfig.BASE_URL,
+      url: apiConfig.ENDPOINTS.CUSTOMER_BY_ID(id),
+      method: 'put',
+      data: body,
+      headers: {
+        'content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    return await this.request.send<ICustomerResponse>(options);
+  }
+
+  @logStep()
+  async delete(id: string, token: string) {
+    const options: IRequestOptions = {
+      baseURL: apiConfig.BASE_URL,
+      url: apiConfig.ENDPOINTS.CUSTOMER_BY_ID(id),
+      method: 'delete',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    return await this.request.send<null>(options);
   }
 }
