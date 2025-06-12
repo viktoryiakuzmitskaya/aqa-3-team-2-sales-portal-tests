@@ -5,6 +5,7 @@ export const apiConfig = {
     CUSTOMERS_ALL: '/api/customers/all',
     CUSTOMER_BY_ID: (id: string) => `/api/customers/${id}/`,
     PRODUCTS: '/api/products',
+    PRODUCTS_ALL: '/api/products/all',
     PRODUCT_BY_ID: (id: string) => `/api/products/${id}/`,
     LOGIN: '/api/login',
   },
