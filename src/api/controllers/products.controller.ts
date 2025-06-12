@@ -76,7 +76,7 @@ export class ProductsController {
   }
 
   @logStep()
-  async getAll(token: string, params?: Record<string, string>) {
+  async getAll(token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
       url: apiConfig.ENDPOINTS.PRODUCTS_ALL),
