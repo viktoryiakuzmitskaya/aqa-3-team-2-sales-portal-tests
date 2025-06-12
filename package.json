@@ -4,6 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test:ui": "npx playwright test --project=sales-portal-ui",
+    "test:api": "npx playwright test --project=sales-portal-api",
+    "ui-mode": "npx playwright test --ui",
+    "report-html-open": "npx playwright show-report",
+    "allure-report": "allure generate allure-results -o allure-report --clean",
+    "allure-report-open": "npm run allure-report && allure open allure-report",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prettier": "prettier --config .prettierrc src/**/*.ts --check src/",
@@ -16,7 +22,7 @@
   "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^9.28.0",
-    "@playwright/test": "^1.52.0",
+    "@playwright/test": "^1.53.0",
     "@types/ajv": "^1.0.4",
     "@types/dotenv": "^8.2.3",
     "@types/lodash": "^4.17.17",

@@ -1,5 +1,5 @@
 import { MANUFACTURERS } from 'data/products/manufacturers.data';
-import { IResponseFields, sortDirection } from './api.types';
+import { IResponseFields, productsSortField, sortDirection } from './api.types';
 
 export interface IProduct {
   name: string;
@@ -20,8 +20,17 @@ export interface IProductResponse extends IResponseFields {
 
 export interface IProductsResponse extends IResponseFields {
   Products: IProductFromResponse[];
+}
+
+export interface IProductsSortedResponse extends IResponseFields {
+  Products: IProductFromResponse[];
+  total: number;
+  page: number;
+  limit: number;
+  search: string;
+  manufacturer: MANUFACTURERS[];
   sorting: {
-    sortField: 'createdOn' | 'name' | 'manufacturer' | 'price';
+    sortField: productsSortField;
     sortOrder: sortDirection;
   };
 }
