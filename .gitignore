@@ -7,3 +7,5 @@ node_modules/
 src/.auth/user.json
 allure-results
 allure-report
+# macOS specific files
+.DS_Store
