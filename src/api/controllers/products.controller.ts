@@ -79,7 +79,7 @@ export class ProductsController {
   async getAll(token: string, params?: Record<string, string>) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
-      url: apiConfig.ENDPOINTS.PRODUCTS_ALL + (params ? convertRequestParams(params) : ''),
+      url: apiConfig.ENDPOINTS.PRODUCTS_ALL),
       method: 'get',
       headers: {
         'content-type': 'application/json',
