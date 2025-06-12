@@ -1,6 +1,6 @@
 import { productItemSchema } from './productItem.schema';
 
-export const productByIdSchema = {
+export const productSchema = {
   type: 'object',
   properties: {
     Product: productItemSchema,
