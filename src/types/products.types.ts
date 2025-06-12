@@ -25,3 +25,16 @@ export interface IProductsResponse extends IResponseFields {
     sortOrder: sortDirection;
   };
 }
+
+export interface IProductsSortedResponse extends IResponseFields {
+  Products: IProductFromResponse[];
+  total: number;
+  page: number;
+  limit: number;
+  search: string;
+  manufacturer: string[];
+  sorting: {
+    sortField: 'createdOn' | 'name' | 'manufacturer' | 'price';
+    sortOrder: sortDirection;
+  };
+}

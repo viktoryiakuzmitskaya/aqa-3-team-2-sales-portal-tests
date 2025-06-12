@@ -2,7 +2,12 @@ import { APIRequestContext } from '@playwright/test';
 import { RequestApi } from 'api/apiClients/request';
 import { apiConfig } from 'config/api-config';
 import { IRequestOptions } from 'types/api.types';
-import { IProduct, IProductResponse, IProductsResponse } from 'types/products.types';
+import {
+  IProduct,
+  IProductResponse,
+  IProductsResponse,
+  IProductsSortedResponse,
+} from 'types/products.types';
 import { logStep } from 'utils/reporter.utils';
 import { convertRequestParams } from 'utils/requestParams';
 
@@ -95,6 +100,6 @@ export class ProductsController {
         Authorization: `Bearer ${token}`,
       },
     };
-    return await this.request.send<IProductsResponse>(options);
+    return await this.request.send<IProductsSortedResponse>(options);
   }
 }
