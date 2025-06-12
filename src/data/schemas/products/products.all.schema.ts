@@ -1,11 +1,11 @@
-import { productSchema } from './product.schema';
+import { productItemSchema } from './productItem.schema';
 
 export const productsAllSchema = {
   type: 'object',
   properties: {
     Products: {
       type: 'array',
-      items: productSchema,
+      items: productItemSchema,
     },
     IsSuccess: { type: 'boolean' },
     ErrorMessage: { type: ['string', 'null'] },
