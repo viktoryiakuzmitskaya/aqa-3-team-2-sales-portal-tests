@@ -6,7 +6,7 @@ const customerSchema = {
     email: { type: "string" },
     name : { type: "string" },
     country: {
-      type: "object",
+      type: "string",
       enum: Object.values(COUNTRIES),
     },
     city: { type: "string" },
