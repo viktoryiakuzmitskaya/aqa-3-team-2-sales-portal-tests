@@ -1,6 +1,6 @@
 import { MANUFACTURERS } from 'data/products/manufacturers.data';
 
-const productResponseSchema = {
+const productSchema = {
   type: 'object',
   properties: {
     Product: {
@@ -25,4 +25,4 @@ const productResponseSchema = {
   required: ['Product', 'IsSuccess', 'ErrorMessage'],
 };
 
-export { productResponseSchema };
+export { productSchema };
