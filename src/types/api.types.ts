@@ -22,3 +22,15 @@ export type sortDirection = 'asc' | 'desc';
 export type customersSortField = 'createdOn' | 'email' | 'name' | 'country';
 
 export type productsSortField = 'createdOn' | 'name' | 'manufacturer' | 'price';
+
+export enum SORT_ORDERS {
+  ASC = 'asc',
+  DESC = 'desc',
+}
+
+export enum PRODUCTS_SORT_FIELDS {
+  CREATED_ON = 'createdOn',
+  NAME = 'name',
+  MANUFACTURER = 'manufacturer',
+  PRICE = 'price',
+}
