@@ -1,13 +1,13 @@
-import { baseSchema } from "../base.schema";
-import { customerSchema } from "./customer.schema"
+import { baseSchema } from '../base.schema';
+import { customerSchema } from './customer.schema';
 
-const getCustomersSchemaById  = {
-    type: "object",
-    properties: {
-...baseSchema,
-Customer: customerSchema,
-    },
-    required: ["IsSuccess", "ErrorMessage", "Customer"],
+const getCustomersSchemaById = {
+  type: 'object',
+  properties: {
+    ...baseSchema,
+    Customer: customerSchema,
+  },
+  required: ['IsSuccess', 'ErrorMessage', 'Customer'],
 };
 
-export { getCustomersSchemaById }
+export { getCustomersSchemaById };

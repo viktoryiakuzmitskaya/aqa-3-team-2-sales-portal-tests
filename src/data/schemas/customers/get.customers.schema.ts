@@ -1,53 +1,53 @@
-import { baseSchema } from "../base.schema";
-import { customerSchema } from "./customer.schema"
+import { baseSchema } from '../base.schema';
+import { customerSchema } from './customer.schema';
 
 const getCustomersSchema = {
-  type: "object",
+  type: 'object',
   properties: {
     Customers: {
-      type: "array",
+      type: 'array',
       items: customerSchema,
     },
     total: {
-      type: "number",
+      type: 'number',
     },
     page: {
-      type: "number",
+      type: 'number',
     },
     limit: {
-      type: ["number", "null"],
+      type: ['number', 'null'],
     },
     search: {
-      type: "string",
+      type: 'string',
     },
     country: {
-      type: "array",
+      type: 'array',
     },
     sorting: {
-      type: "object",
+      type: 'object',
       properties: {
         sortField: {
-          type: "string",
+          type: 'string',
         },
         sortOrder: {
-          type: "string",
+          type: 'string',
         },
       },
-      required: ["sortField", "sortOrder"],
+      required: ['sortField', 'sortOrder'],
     },
-...baseSchema,
+    ...baseSchema,
   },
   required: [
-    "Customers",
-    "total",
-    "page",
-    "limit",
-    "search",
-    "country",
-    "sorting",
-    "IsSuccess",
-    "ErrorMessage",
+    'Customers',
+    'total',
+    'page',
+    'limit',
+    'search',
+    'country',
+    'sorting',
+    'IsSuccess',
+    'ErrorMessage',
   ],
 };
 
-export { getCustomersSchema }
+export { getCustomersSchema };
