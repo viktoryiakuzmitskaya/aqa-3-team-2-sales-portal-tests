@@ -20,10 +20,6 @@ export interface IProductResponse extends IResponseFields {
 
 export interface IProductsResponse extends IResponseFields {
   Products: IProductFromResponse[];
-  sorting: {
-    sortField: productsSortField;
-    sortOrder: sortDirection;
-  };
 }
 
 export interface IProductsSortedResponse extends IResponseFields {
