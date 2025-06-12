@@ -1,4 +1,4 @@
-
+import { baseSchema } from "../base.schema";
 
 const getCustomerOrderByIdSchema = {
   type: "object",
@@ -143,12 +143,7 @@ const getCustomerOrderByIdSchema = {
         required: ["_id", "status", "customer", "products", "delivery", "total_price", "createdOn", "comments", "history", "assignedManager"],
       }
     },
-    IsSuccess: {
-        type: "boolean",
-      },
-      ErrorMessage: {
-        type: ["string", "null"],
-      },
+...baseSchema,
   },
   required: ["Orders","IsSuccess","ErrorMessage"],
 };
