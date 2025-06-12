@@ -1,4 +1,6 @@
 import { productItemSchema } from './productItem.schema';
+import { MANUFACTURERS } from 'data/products/manufacturers.data';
+import { SORT_ORDERS, PRODUCTS_SORT_FIELDS } from 'types/api.types';
 
 export const productsSchema = {
   type: 'object',
@@ -11,12 +13,15 @@ export const productsSchema = {
     page: { type: 'number' },
     limit: { type: 'number' },
     search: { type: 'string' },
-    manufacturer: { type: 'array', items: { type: 'string' } },
+    manufacturer: {
+      type: 'array',
+      items: { type: 'string', enum: Object.values(MANUFACTURERS) },
+    },
     sorting: {
       type: 'object',
       properties: {
-        sortField: { type: 'string' },
-        sortOrder: { type: 'string' },
+        sortField: { type: 'string', enum: Object.values(PRODUCTS_SORT_FIELDS) },
+        sortOrder: { type: 'string', enum: Object.values(SORT_ORDERS) },
       },
       required: ['sortField', 'sortOrder'],
     },
