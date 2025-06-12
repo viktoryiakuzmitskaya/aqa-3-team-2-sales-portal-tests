@@ -1,13 +1,18 @@
-import { productObjectSchema } from './product.object.schema';
+import { MANUFACTURERS } from 'data/products/manufacturers.data';
 
-const productSchema = {
+export const productSchema = {
   type: 'object',
   properties: {
-    Product: productObjectSchema,
-    IsSuccess: { type: 'boolean' },
-    ErrorMessage: { type: ['string', 'null'] },
+    _id: { type: 'string' },
+    name: { type: 'string' },
+    amount: { type: 'number' },
+    price: { type: 'number' },
+    manufacturer: {
+      type: 'string',
+      enum: Object.values(MANUFACTURERS),
+    },
+    createdOn: { type: 'string' },
+    notes: { type: 'string' },
   },
-  required: ['Product', 'IsSuccess', 'ErrorMessage'],
+  required: ['_id', 'name', 'amount', 'price', 'manufacturer', 'createdOn'],
 };
-
-export { productSchema };

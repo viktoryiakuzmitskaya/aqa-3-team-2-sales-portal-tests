@@ -1,14 +1,11 @@
 import { productSchema } from './product.schema';
 
-export const productsSchema = {
+export const productByIdSchema = {
   type: 'object',
   properties: {
-    Products: {
-      type: 'array',
-      items: productSchema,
-    },
+    Product: productSchema,
     IsSuccess: { type: 'boolean' },
     ErrorMessage: { type: ['string', 'null'] },
   },
-  required: ['Products', 'IsSuccess', 'ErrorMessage'],
+  required: ['Product', 'IsSuccess', 'ErrorMessage'],
 };
