@@ -6,11 +6,8 @@ const customerSchema = {
     email: { type: "string" },
     name : { type: "string" },
     country: {
-      type: "array",
-      items: {
-        type: "string",
-        enum: Object.values(COUNTRIES),
-      },
+      type: "object",
+      enum: Object.values(COUNTRIES),
     },
     city: { type: "string" },
     street: { type: "string" },
