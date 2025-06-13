@@ -1,16 +1,7 @@
-import { test as customerController } from 'fixtures/controllers.fixtures';
-import { test as productController } from 'fixtures/controllers.fixtures';
-import { test as signInController } from 'fixtures/controllers.fixtures';
-import { test as customerService } from 'fixtures/services.fixtures';
-import { test as productService } from 'fixtures/services.fixtures';
+import { test as controllers } from 'fixtures/controllers.fixtures';
+import { test as services } from 'fixtures/services.fixtures';
 import { expect, mergeTests } from '@playwright/test';
 
-const test = mergeTests(
-  customerController,
-  productController,
-  signInController,
-  customerService,
-  productService,
-);
+const test = mergeTests(services, controllers);
 
 export { expect, test };
