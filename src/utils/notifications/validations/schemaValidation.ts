@@ -1,13 +1,16 @@
 import { expect } from '@playwright/test';
-import { IResponse, IResponseFields } from 'types/api.types';
+import Ajv from 'ajv';
 
-export function validateResponse<T extends IResponseFields>(
-  response: IResponse<T>,
-  status: number,
-  IsSuccess: boolean,
-  ErrorMessage: string | null,
-) {
-  expect.soft(response.status).toBe(status);
-  expect.soft(response.body.IsSuccess).toBe(IsSuccess);
-  expect.soft(response.body.ErrorMessage).toBe(ErrorMessage);
+export function validateSchema(expectedSchema: object, body: object) {
+  const ajv = new Ajv();
+  const validate = ajv.compile(expectedSchema);
+
+  const isValid = validate(body);
+
+  if (!isValid) {
+    console.log('Data is not valid according to the schema.');
+    console.log(validate.errors);
+    expect.soft(validate.errors, 'Should not have json schema errors').toMatchObject([]);
+  }
+  expect.soft(isValid, 'Actual should match expected').toBe(true);
 }
