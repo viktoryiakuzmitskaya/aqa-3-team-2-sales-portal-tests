@@ -10,6 +10,7 @@
     "report-html-open": "npx playwright show-report",
     "allure-report": "allure generate allure-results -o allure-report --clean",
     "allure-report-open": "npm run allure-report && allure open allure-report",
+    "remove-test-results-and-reports": "rimraf allure-report && rimraf allure-results && rimraf playwright-report",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prettier": "prettier --config .prettierrc src/**/*.ts --check src/",
