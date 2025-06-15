@@ -1,8 +1,8 @@
 export const baseSchema = {
-  IsSuccess: {
-    type: 'boolean',
+  type: 'object',
+  properties: {
+    IsSuccess: { type: 'boolean' },
+    ErrorMessage: { type: ['string', 'null'] },
   },
-  ErrorMessage: {
-    type: ['string', 'null'],
-  },
+  required: ['IsSuccess', 'ErrorMessage'],
 };
