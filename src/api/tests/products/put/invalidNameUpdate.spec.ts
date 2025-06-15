@@ -27,7 +27,7 @@ test.beforeEach(async ({ signInService, productService }) => {
 const nameLengths = [2, 41];
 
 for (const length of nameLengths) {
-  test(`${TAGS.API} ${TAGS.PRODUCTS} should update product name (${length} characters)`, async ({
+  test(`${TAGS.API} ${TAGS.PRODUCTS} should not update product name with ${length} characters`, async ({
     productService
   }) => {
     const updatedProductData: IProduct = {
