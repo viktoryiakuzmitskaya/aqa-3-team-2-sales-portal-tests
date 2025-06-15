@@ -7,7 +7,7 @@ import {
 import { ERROR_MESSAGES } from 'data/errorMessages';
 import { STATUS_CODES } from 'data/status.code';
 import { TAGS } from 'data/tages';
-import { expect, test } from 'fixtures';
+import { test } from 'fixtures';
 import { validateResponse } from 'utils/notifications/validations/responseValidation';
 
 test.describe('[API] [Customers] Create a new customer', () => {

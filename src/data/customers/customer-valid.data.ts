@@ -81,9 +81,4 @@ export const validTestCases = [
     })(),
     isSuccess: true,
   },
-  {
-    name: 'Missing notes field1',
-    data: (({ notes, ...rest }) => rest)(generateCustomerData()),
-    isSuccess: true,
-  },
 ];
