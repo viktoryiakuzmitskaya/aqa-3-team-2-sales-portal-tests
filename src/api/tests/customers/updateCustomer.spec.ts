@@ -4,7 +4,7 @@ import {
   invalidTestCases,
   invalidTestCasesWithoutToken,
 } from 'data/customers/customer-invalid.data';
-import { ERROR_MESSAGES } from 'data/errorMessages';
+import { ERRORS } from 'data/errorMessages';
 import { STATUS_CODES } from 'data/status.code';
 import { TAGS } from 'data/tages';
 import { test } from 'fixtures';
@@ -89,7 +89,7 @@ test.describe('[API] [Customers] Update the customer by ID', () => {
           response,
           STATUS_CODES.CONFLICT,
           false,
-          ERROR_MESSAGES.CUSTOMER_ALREADY_EXISTS(duplicateData.email),
+          ERRORS.CUSTOMER_ALREADY_EXISTS(duplicateData.email),
         );
       },
     );
@@ -109,7 +109,7 @@ test.describe('[API] [Customers] Update the customer by ID', () => {
           response,
           STATUS_CODES.NOT_FOUND,
           false,
-          ERROR_MESSAGES.CUSTOMER_NOT_FOUND(deletedID),
+          ERRORS.CUSTOMER_NOT_FOUND(deletedID),
         );
       },
     );

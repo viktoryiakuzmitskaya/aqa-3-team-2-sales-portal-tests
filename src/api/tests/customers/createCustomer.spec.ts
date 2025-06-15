@@ -4,11 +4,11 @@ import {
   invalidTestCases,
   invalidTestCasesWithoutToken,
 } from 'data/customers/customer-invalid.data';
-import { ERROR_MESSAGES } from 'data/errorMessages';
 import { STATUS_CODES } from 'data/status.code';
 import { TAGS } from 'data/tages';
 import { test } from 'fixtures';
 import { validateResponse } from 'utils/notifications/validations/responseValidation';
+import { ERRORS } from 'data/errorMessages';
 
 test.describe('[API] [Customers] Create a new customer', () => {
   let token = '';
@@ -79,7 +79,7 @@ test.describe('[API] [Customers] Create a new customer', () => {
           createResponse2,
           STATUS_CODES.CONFLICT,
           false,
-          ERROR_MESSAGES.CUSTOMER_ALREADY_EXISTS(customer2Data.email),
+          ERRORS.CUSTOMER_ALREADY_EXISTS(customer2Data.email),
         );
       },
     );
