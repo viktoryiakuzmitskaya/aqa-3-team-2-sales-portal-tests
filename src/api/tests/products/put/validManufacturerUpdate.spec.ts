@@ -2,47 +2,40 @@ import { test, expect } from 'fixtures/index';
 import { IProduct } from 'types/products.types';
 import { productSchema } from 'data/schemas/products/product.schema';
 import { STATUS_CODES } from 'data/status.code';
+import { MANUFACTURERS } from 'data/products/manufacturers.data';
 import { TAGS } from 'data/tags';
 import { generateProductData } from 'data/products/generateProduct.data';
 import { validateSchema } from 'utils/notifications/validations/schemaValidation';
 import { validateResponse } from 'utils/notifications/validations/responseValidation';
 
 let token = '';
-let initialProductData: IProduct;
+const initialProductData = generateProductData({ manufacturer: MANUFACTURERS.AMAZON });
 let productId = '';
 
 test.beforeEach(async ({ signInService, productService }) => {
   token = await signInService.loginAsLocalUser();
-  initialProductData = generateProductData();
   const createProductResponse = await productService.controller.create(initialProductData, token);
   validateResponse(createProductResponse, STATUS_CODES.CREATED, true, null);
   validateSchema(productSchema, createProductResponse.body);
   productId = createProductResponse.body.Product._id;
 });
 
-const amounts = [1000];
-
-for (const amount of amounts) {
-  test(`${TAGS.API} ${TAGS.PRODUCTS} should not update product amount to ${amount}`, async ({
-    productService,
-  }) => {
-    const updatedProductData: IProduct = {
-      ...initialProductData,
-      amount: 1000,
-    };
-    const updateProductResponse = await productService.controller.updateById(
-      updatedProductData,
-      productId,
-      token,
-    );
-    validateResponse(
-      updateProductResponse,
-      STATUS_CODES.BAD_REQUEST,
-      false,
-      'Incorrect request body',
-    );
-  });
-}
+test(`${TAGS.API} ${TAGS.PRODUCTS} should update manufacturer of the product`, async ({
+  productService,
+}) => {
+  const updatedProductData: IProduct = {
+    ...initialProductData,
+    manufacturer: MANUFACTURERS.GOOGLE,
+  };
+  const updateProductResponse = await productService.controller.updateById(
+    updatedProductData,
+    productId,
+    token,
+  );
+  validateResponse(updateProductResponse, STATUS_CODES.OK, true, null);
+  validateSchema(productSchema, updateProductResponse.body);
+  expect.soft(updateProductResponse.body.Product).toMatchObject({ ...updatedProductData });
+});
 
 test.afterEach(async ({ productService }) => {
   if (productId) {
