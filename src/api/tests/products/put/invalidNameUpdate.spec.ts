@@ -15,10 +15,7 @@ let productId = '';
 test.beforeEach(async ({ signInService, productService }) => {
   token = await signInService.loginAsLocalUser();
   initialProductData = generateProductData();
-  const createProductResponse = await productService.controller.create(
-    initialProductData,
-    token,
-  );
+  const createProductResponse = await productService.controller.create(initialProductData, token);
   validateResponse(createProductResponse, STATUS_CODES.CREATED, true, null);
   validateSchema(productSchema, createProductResponse.body);
   productId = createProductResponse.body.Product._id;
@@ -28,7 +25,7 @@ const nameLengths = [2, 41];
 
 for (const length of nameLengths) {
   test(`${TAGS.API} ${TAGS.PRODUCTS} should not update product name with ${length} characters`, async ({
-    productService
+    productService,
   }) => {
     const updatedProductData: IProduct = {
       ...initialProductData,
@@ -39,7 +36,12 @@ for (const length of nameLengths) {
       productId,
       token,
     );
-    validateResponse(updateProductResponse, STATUS_CODES.BAD_REQUEST, false, 'Incorrect request body');
+    validateResponse(
+      updateProductResponse,
+      STATUS_CODES.BAD_REQUEST,
+      false,
+      'Incorrect request body',
+    );
   });
 }
 

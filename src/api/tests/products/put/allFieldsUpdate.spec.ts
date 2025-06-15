@@ -14,17 +14,14 @@ let productId = '';
 
 test.beforeEach(async ({ signInService, productService }) => {
   token = await signInService.loginAsLocalUser();
-  const createProductResponse = await productService.controller.create(
-    initialProductData,
-    token,
-  );
+  const createProductResponse = await productService.controller.create(initialProductData, token);
   validateResponse(createProductResponse, STATUS_CODES.CREATED, true, null);
   validateSchema(productSchema, createProductResponse.body);
   productId = createProductResponse.body.Product._id;
 });
 
 test(`${TAGS.API} ${TAGS.PRODUCTS} should update all fields of the product`, async ({
-  productService
+  productService,
 }) => {
   const updatedProductData: IProduct = {
     ...initialProductData,

@@ -14,17 +14,17 @@ let productId = '';
 test.beforeEach(async ({ signInService, productService }) => {
   token = await signInService.loginAsLocalUser();
   initialProductData = generateProductData();
-  const createProductResponse = await productService.controller.create(
-    initialProductData,
-    token,
-  );
+  const createProductResponse = await productService.controller.create(initialProductData, token);
   validateResponse(createProductResponse, STATUS_CODES.CREATED, true, null);
   validateSchema(productSchema, createProductResponse.body);
   productId = createProductResponse.body.Product._id;
 });
 
-test(`${TAGS.API} ${TAGS.PRODUCTS} should not update product amount to 1000`, async ({
-  productService
+const amounts = [1000];
+
+for (const amount of amounts) {
+  test(`${TAGS.API} ${TAGS.PRODUCTS} should not update product amount to ${amount}`, async ({
+  productService,
 }) => {
   const updatedProductData: IProduct = {
     ...initialProductData,
@@ -35,8 +35,15 @@ test(`${TAGS.API} ${TAGS.PRODUCTS} should not update product amount to 1000`, as
     productId,
     token,
   );
-  validateResponse(updateProductResponse, STATUS_CODES.BAD_REQUEST, false, 'Incorrect request body');
+  validateResponse(
+    updateProductResponse,
+    STATUS_CODES.BAD_REQUEST,
+    false,
+    'Incorrect request body',
+  );
 });
+}
+
 
 test.afterEach(async ({ productService }) => {
   if (productId) {

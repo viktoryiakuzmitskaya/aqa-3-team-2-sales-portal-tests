@@ -14,10 +14,7 @@ let productId = '';
 test.beforeEach(async ({ signInService, productService }) => {
   token = await signInService.loginAsLocalUser();
   initialProductData = generateProductData();
-  const createProductResponse = await productService.controller.create(
-    initialProductData,
-    token,
-  );
+  const createProductResponse = await productService.controller.create(initialProductData, token);
   validateResponse(createProductResponse, STATUS_CODES.CREATED, true, null);
   validateSchema(productSchema, createProductResponse.body);
   productId = createProductResponse.body.Product._id;
@@ -27,7 +24,7 @@ const amounts = [1, 999];
 
 for (const amount of amounts) {
   test(`${TAGS.API} ${TAGS.PRODUCTS} should update product amount to ${amount}`, async ({
-    productService
+    productService,
   }) => {
     const updatedProductData: IProduct = {
       ...initialProductData,
