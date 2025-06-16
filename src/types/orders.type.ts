@@ -5,9 +5,10 @@ import {
   ORDER_STATUSES,
   ROLES,
 } from 'data/orders/orders.data';
-import { IProductFromResponse } from './products.types';
 import { ICustomerFromResponse } from './customer.types';
 import { IResponseFields } from './api.types';
+import { ILoginFromResponse } from './signIn.types';
+import { MANUFACTURERS } from 'data/products/manufacturers.data';
 
 export interface IDelivery {
   address?: {
@@ -28,20 +29,15 @@ export interface IPerformer {
   username: string;
   _id: string;
 }
-export interface IAssignedManager {
-  createdOn: string;
-  firstName: string;
-  lastName: string;
-}
 
 export interface IHistory {
   action: ORDER_HISTORY_ACTIONS;
-  assignedManager?: IAssignedManager | null;
+  assignedManager: ILoginFromResponse | null;
   changedOn: string;
   customer: string;
-  delivery?: IDelivery | null;
-  performer?: IPerformer;
-  products: IProductFromResponse[];
+  delivery: IDelivery | null;
+  performer: IPerformer;
+  products: IProductOrder[];
   status: ORDER_STATUSES;
   total_price: number;
 }
@@ -53,13 +49,13 @@ export interface ICommentFromResponse {
 }
 
 export interface IOrder {
-  assignedManager?: IAssignedManager | null;
+  assignedManager: ILoginFromResponse | null;
   comments: ICommentFromResponse[];
   createdOn: string;
   customer: ICustomerFromResponse;
   delivery: IDelivery | null;
   history: IHistory;
-  products: IProductFromResponse[];
+  products: IProductOrder[];
   status: ORDER_STATUSES;
   total_price: number;
 }
@@ -72,4 +68,14 @@ export interface IOrderResponse extends IResponseFields {
 }
 export interface IOrdersResponse extends IResponseFields {
   Orders: IOrderFromResponse[];
+}
+
+export interface IProductOrder {
+  amount: number;
+  name: string;
+  manufacturer: MANUFACTURERS;
+  price: number;
+  notes?: string;
+  received: boolean;
+  _id: string;
 }
