@@ -39,6 +39,7 @@ test.describe('[API] [Customers] Create a new customer', () => {
           id = response.body.Customer._id;
 
           validateSchema(postCustomerSchema, response.body);
+          validateResponse(response, STATUS_CODES.CREATED, true, null);
         },
       );
     });
