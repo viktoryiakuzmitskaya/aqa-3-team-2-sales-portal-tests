@@ -3,15 +3,14 @@ import {
   DELIVERY_CONDITIONS,
   ORDER_HISTORY_ACTIONS,
   ORDER_STATUSES,
-  ROLES,
 } from 'data/orders/orders.data';
 import { ICustomerFromResponse } from './customer.types';
 import { IResponseFields } from './api.types';
-import { ILoginFromResponse } from './signIn.types';
-import { MANUFACTURERS } from 'data/products/manufacturers.data';
+import { IProduct } from './products.types';
+import { IManager } from './signIn.types';
 
 export interface IDelivery {
-  address?: {
+  address: {
     country: COUNTRIES;
     city: string;
     street: string;
@@ -21,22 +20,14 @@ export interface IDelivery {
   finalDate: string;
   condition: DELIVERY_CONDITIONS;
 }
-export interface IPerformer {
-  createdOn: string;
-  firstName: string;
-  lastName: string;
-  roles: ROLES;
-  username: string;
-  _id: string;
-}
 
 export interface IHistory {
   action: ORDER_HISTORY_ACTIONS;
-  assignedManager: ILoginFromResponse | null;
+  assignedManager: IManager | null;
   changedOn: string;
   customer: string;
   delivery: IDelivery | null;
-  performer: IPerformer;
+  performer: IManager;
   products: IProductOrder[];
   status: ORDER_STATUSES;
   total_price: number;
@@ -49,7 +40,7 @@ export interface ICommentFromResponse {
 }
 
 export interface IOrder {
-  assignedManager: ILoginFromResponse | null;
+  assignedManager: IManager | null;
   comments: ICommentFromResponse[];
   createdOn: string;
   customer: ICustomerFromResponse;
@@ -70,12 +61,6 @@ export interface IOrdersResponse extends IResponseFields {
   Orders: IOrderFromResponse[];
 }
 
-export interface IProductOrder {
-  amount: number;
-  name: string;
-  manufacturer: MANUFACTURERS;
-  price: number;
-  notes?: string;
+export interface IProductOrder extends IProduct {
   received: boolean;
-  _id: string;
 }
