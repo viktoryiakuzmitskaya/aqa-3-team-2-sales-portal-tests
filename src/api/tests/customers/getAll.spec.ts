@@ -18,7 +18,7 @@ test.describe('[API] [Customers] [Get All Customers]', () => {
   );
 
   test(
-    'Should GET the customer All',
+    'Should GET all customers',
     { tag: [TAGS.SMOKE, TAGS.API, TAGS.REGRESSION, TAGS.CUSTOMERS] },
     async function ({ customerController }) {
       const response = await customerController.getAll(token);
