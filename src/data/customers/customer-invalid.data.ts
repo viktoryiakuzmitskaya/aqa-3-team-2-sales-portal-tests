@@ -1,6 +1,6 @@
 import { generateCustomerData } from 'data/customers/generateCustomer.data';
 import { COUNTRIES } from './countries.data';
-import { ERROR_MESSAGES } from 'data/errorMessages';
+import { ERRORS } from 'data/errorMessages';
 
 export const invalidTestCases = [
   {
@@ -159,11 +159,11 @@ export const invalidTestCasesWithoutToken = [
   {
     name: 'token is invalid (empty string)',
     token: ' ',
-    expectedMessage: ERROR_MESSAGES.NOT_AUTHORIZED,
+    expectedMessage: ERRORS.NOT_AUTHORIZED,
   },
   {
     name: 'token is missed (random string)',
     token: '12334',
-    expectedMessage: ERROR_MESSAGES.INVALID_ACCESS_TOKEN,
+    expectedMessage: ERRORS.UNAUTHORIZED,
   },
 ];

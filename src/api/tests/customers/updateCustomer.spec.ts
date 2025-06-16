@@ -10,6 +10,9 @@ import { TAGS } from 'data/tages';
 import { test } from 'fixtures';
 import { ICustomer } from 'types/customer.types';
 import { validateResponse } from 'utils/notifications/validations/responseValidation';
+import { validateSchema } from 'utils/notifications/validations/schemaValidation';
+import { baseSchema } from 'data/schemas/base.schema';
+import { putCustomersSchema } from 'data/schemas/customers/update.customers.schema';
 
 test.describe('[API] [Customers] Update the customer by ID', () => {
   let token = '';
@@ -42,6 +45,8 @@ test.describe('[API] [Customers] Update the customer by ID', () => {
         { tag: [TAGS.API, TAGS.CUSTOMERS, TAGS.SMOKE, TAGS.REGRESSION] },
         async ({ customerController }) => {
           const response = await customerController.update(id, { ...originalData, ...data }, token);
+
+          validateSchema(putCustomersSchema, response.body);
           validateResponse(response, STATUS_CODES.OK, true, null);
         },
       );
@@ -55,6 +60,8 @@ test.describe('[API] [Customers] Update the customer by ID', () => {
         { tag: [TAGS.API, TAGS.CUSTOMERS, TAGS.REGRESSION] },
         async ({ customerController }) => {
           const response = await customerController.update(id, { ...originalData, ...data }, token);
+
+          validateSchema(baseSchema, response.body);
           validateResponse(response, STATUS_CODES.BAD_REQUEST, false, expectedError);
         },
       );
@@ -67,6 +74,8 @@ test.describe('[API] [Customers] Update the customer by ID', () => {
         async ({ customerController }) => {
           const newData = generateCustomerData();
           const response = await customerController.update(id, newData, token);
+
+          validateSchema(baseSchema, response.body);
           validateResponse(response, STATUS_CODES.UNAUTHORIZED, false, expectedMessage);
         },
       );
@@ -85,6 +94,8 @@ test.describe('[API] [Customers] Update the customer by ID', () => {
           { ...originalData, email: duplicateData.email },
           token,
         );
+
+        validateSchema(baseSchema, response.body);
         validateResponse(
           response,
           STATUS_CODES.CONFLICT,
@@ -105,6 +116,8 @@ test.describe('[API] [Customers] Update the customer by ID', () => {
         await customerController.delete(deletedID, token);
 
         const response = await customerController.update(deletedID, generateCustomerData(), token);
+
+        validateSchema(baseSchema, response.body);
         validateResponse(
           response,
           STATUS_CODES.NOT_FOUND,

@@ -9,6 +9,9 @@ import { TAGS } from 'data/tages';
 import { test } from 'fixtures';
 import { validateResponse } from 'utils/notifications/validations/responseValidation';
 import { ERRORS } from 'data/errorMessages';
+import { validateSchema } from 'utils/notifications/validations/schemaValidation';
+import { baseSchema } from 'data/schemas/base.schema';
+import { postCustomerSchema } from 'data/schemas/customers/create.customers.schema';
 
 test.describe('[API] [Customers] Create a new customer', () => {
   let token = '';
@@ -31,9 +34,11 @@ test.describe('[API] [Customers] Create a new customer', () => {
       test(
         `Should create customer: ${name}`,
         { tag: [TAGS.API, TAGS.CUSTOMERS, TAGS.SMOKE, TAGS.REGRESSION] },
-        async ({ customerService }) => {
-          const customerResponse = await customerService.create(token, data);
-          id = customerResponse._id;
+        async ({ customerController }) => {
+          const response = await customerController.create(data, token);
+          id = response.body.Customer._id;
+
+          validateSchema(postCustomerSchema, response.body);
         },
       );
     });
@@ -46,6 +51,8 @@ test.describe('[API] [Customers] Create a new customer', () => {
         { tag: [TAGS.API, TAGS.CUSTOMERS, TAGS.REGRESSION] },
         async ({ customerController }) => {
           const response = await customerController.create(data, token);
+
+          validateSchema(baseSchema, response.body);
           validateResponse(response, STATUS_CODES.BAD_REQUEST, false, expectedError);
         },
       );
@@ -58,6 +65,8 @@ test.describe('[API] [Customers] Create a new customer', () => {
         async ({ customerController }) => {
           const data = generateCustomerData();
           const response = await customerController.create(data, token);
+
+          validateSchema(baseSchema, response.body);
           validateResponse(response, STATUS_CODES.UNAUTHORIZED, false, expectedMessage);
         },
       );
@@ -75,6 +84,7 @@ test.describe('[API] [Customers] Create a new customer', () => {
         const customer2Data = { ...generateCustomerData(), email: customer1Data.email };
         const createResponse2 = await customerController.create(customer2Data, token);
 
+        validateSchema(baseSchema, createResponse2.body);
         validateResponse(
           createResponse2,
           STATUS_CODES.CONFLICT,
