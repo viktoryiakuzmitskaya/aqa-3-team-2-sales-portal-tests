@@ -6,7 +6,7 @@ import { expect, test } from 'fixtures';
 import { validateResponse } from 'utils/notifications/validations/responseValidation';
 import { validateSchema } from 'utils/notifications/validations/schemaValidation';
 
-test.describe('[API] [Customers] [Get By Id]', () => {
+test.describe('[API] [Customers] [Get All Customers]', () => {
   const id = '';
   let token = '';
   test.beforeAll(
