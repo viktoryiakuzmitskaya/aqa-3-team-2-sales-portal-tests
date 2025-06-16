@@ -5,7 +5,7 @@ import {
   ORDER_STATUSES,
 } from 'data/orders/orders.data';
 import { ICustomerFromResponse } from './customer.types';
-import { IResponseFields } from './api.types';
+import { IResponseFields, SORT_ORDERS } from './api.types';
 import { IProduct } from './products.types';
 import { IManager } from './signIn.types';
 
@@ -59,8 +59,24 @@ export interface IOrderResponse extends IResponseFields {
 }
 export interface IOrdersResponse extends IResponseFields {
   Orders: IOrderFromResponse[];
+  limit: number;
+  page: number;
+  search: string;
+  sorting: {
+    sortField: ordersSortField;
+    sortOrder: SORT_ORDERS;
+  };
+  status: ORDER_STATUSES;
+  total: number;
 }
-
+export type ordersSortField =
+  | 'createdOn'
+  | 'email'
+  | 'name'
+  | 'orderNumber'
+  | 'price'
+  | 'status'
+  | 'assignedManager';
 export interface IProductOrder extends IProduct {
   received: boolean;
 }
