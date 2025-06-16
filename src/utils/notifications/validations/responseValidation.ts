@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import { STATUS_CODES } from 'data/status.code';
 import { IResponse, IResponseFields } from 'types/api.types';
 
 export function validateResponse<T extends IResponseFields>(
@@ -10,4 +11,9 @@ export function validateResponse<T extends IResponseFields>(
   expect.soft(response.status).toBe(status);
   expect.soft(response.body.IsSuccess).toBe(IsSuccess);
   expect.soft(response.body.ErrorMessage).toBe(ErrorMessage);
+}
+
+export function validateDeleteResponse(response: IResponse<null>) {
+  expect.soft(response.status).toBe(STATUS_CODES.DELETED);
+  expect.soft(response.body).toBe('');
 }
