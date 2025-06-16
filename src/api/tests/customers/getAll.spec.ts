@@ -27,7 +27,7 @@ test.describe('[API] [Customers] [Get All Customers]', () => {
     },
   );
   test(
-    'Should NOT GET the customer all with incorrect authorization token',
+    'Should get error with incorrect authorization token',
     { tag: [TAGS.API, TAGS.REGRESSION, TAGS.CUSTOMERS] },
     async function ({ customerController }) {
       const response = await customerController.getAll(token.slice(1));
