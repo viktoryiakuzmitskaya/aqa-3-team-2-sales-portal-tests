@@ -19,11 +19,8 @@ export const apiConfig = {
     RECEIVE_ORDER: (orderId: string) => `/api/orders/${orderId}/receive`,
     UPDATE_STATUS: (orderId: string) => `/api/orders/${orderId}/status`,
     LOGIN: '/api/login',
-    ORDERS: '/api/orders',
-    ORDER_BY_ID: (id: string) => `/api/orders/${id}/`,
-    ASSIGN_MANAGER: (orderId: string, managerId: string) =>
-      `/api/orders/${orderId}/assign-manager/${managerId}/`,
-    ORDER_DELIVERY: (id: string) => `/api/orders/${id}/delivery/`,
-    ORDER_RECEIVE: (id: string) => `/api/orders/${id}/receive/`,
+    NOTIFICATIONS: '/api/notifications',
+    NOTIFICATIONS_READ_ALL: '/api/notifications/read-all',
+    NOTIFICATION_BY_ID: (notificationId: string) => `/api/notifications/${notificationId}/read`,
   },
 } as const;
