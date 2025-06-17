@@ -2,7 +2,9 @@ import { test, expect } from 'fixtures/index';
 import { faker } from '@faker-js/faker';
 import { IProduct } from 'types/products.types';
 import { productSchema } from 'data/schemas/products/product.schema';
+import { baseSchema } from 'data/schemas/base.schema';
 import { STATUS_CODES } from 'data/status.code';
+import { ERRORS } from 'data/errorMessages';
 import { MANUFACTURERS } from 'data/products/manufacturers.data';
 import { TAGS } from 'data/tags';
 import { generateProductData } from 'data/products/generateProduct.data';
@@ -57,12 +59,8 @@ test.describe(`${TAGS.API} ${TAGS.PRODUCTS} Product Update`, () => {
       productId,
       invalidToken,
     );
-    validateResponse(
-      updateProductResponse,
-      STATUS_CODES.UNAUTHORIZED,
-      false,
-      'Invalid access token',
-    );
+    validateSchema(baseSchema, updateProductResponse.body);
+    validateResponse(updateProductResponse, STATUS_CODES.UNAUTHORIZED, false, ERRORS.UNAUTHORIZED);
   });
 
   test('should update manufacturer of the product', async ({ productService }) => {
@@ -108,11 +106,12 @@ test.describe(`${TAGS.API} ${TAGS.PRODUCTS} Product Update`, () => {
         productId,
         token,
       );
+      validateSchema(baseSchema, updateProductResponse.body);
       validateResponse(
         updateProductResponse,
         STATUS_CODES.BAD_REQUEST,
         false,
-        'Incorrect request body',
+        ERRORS.INCORRECT_REQUEST_BODY,
       );
     });
   });
@@ -128,8 +127,8 @@ test.describe(`${TAGS.API} ${TAGS.PRODUCTS} Product Update`, () => {
         productId,
         token,
       );
-      validateResponse(updateProductResponse, STATUS_CODES.OK, true, null);
       validateSchema(productSchema, updateProductResponse.body);
+      validateResponse(updateProductResponse, STATUS_CODES.OK, true, null);
       expect.soft(updateProductResponse.body.Product).toMatchObject({ ...updatedProductData });
     });
   });
@@ -145,11 +144,12 @@ test.describe(`${TAGS.API} ${TAGS.PRODUCTS} Product Update`, () => {
         productId,
         token,
       );
+      validateSchema(baseSchema, updateProductResponse.body);
       validateResponse(
         updateProductResponse,
         STATUS_CODES.BAD_REQUEST,
         false,
-        'Incorrect request body',
+        ERRORS.INCORRECT_REQUEST_BODY,
       );
     });
   });
@@ -182,11 +182,12 @@ test.describe(`${TAGS.API} ${TAGS.PRODUCTS} Product Update`, () => {
         productId,
         token,
       );
+      validateSchema(baseSchema, updateProductResponse.body);
       validateResponse(
         updateProductResponse,
         STATUS_CODES.BAD_REQUEST,
         false,
-        'Incorrect request body',
+        ERRORS.INCORRECT_REQUEST_BODY,
       );
     });
   });
