@@ -3,7 +3,10 @@ import { ProductsController } from 'api/controllers/products.controller';
 import { generateProductData } from 'data/products/generateProduct.data';
 import { STATUS_CODES } from 'data/status.code';
 import { IProduct } from 'types/products.types';
-import { validateDeleteResponse, validateResponse } from 'utils/notifications/validations/responseValidation';
+import {
+  validateDeleteResponse,
+  validateResponse,
+} from 'utils/notifications/validations/responseValidation';
 import { logStep } from 'utils/reporter.utils';
 
 export class ProductsApiService {

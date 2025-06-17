@@ -4,7 +4,7 @@ export interface INotification {
   userId: string;
   type: NotificationType;
   orderId: string;
-  message: NotificationMessage;
+  message: NOTIFICATION_MESSAGE;
   read: boolean;
   expiresAt: string;
   createdAt: string;
@@ -21,6 +21,7 @@ export interface INotificationsResponse extends IResponseFields {
 
 export type NotificationType = 'unassigned' | 'assigned';
 
-export type NotificationMessage =
-  | 'You have been unassigned from order'
-  | 'You have been assigned to order';
+export enum NOTIFICATION_MESSAGE {
+  UNASSIGNED = 'You have been unassigned from order',
+  ASSIGNED = 'You have been assigned to order',
+}
