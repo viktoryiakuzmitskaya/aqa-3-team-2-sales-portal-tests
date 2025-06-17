@@ -8,5 +8,8 @@ export const apiConfig = {
     PRODUCTS_ALL: '/api/products/all',
     PRODUCT_BY_ID: (id: string) => `/api/products/${id}/`,
     LOGIN: '/api/login',
+    NOTIFICATIONS: '/api/notifications',
+    NOTIFICATIONS_READ_ALL: '/api/notifications/read-all',
+    NOTIFICATION_BY_ID: (notificationId: string) => `/api/notifications/${notificationId}/read`,
   },
 } as const;
