@@ -1,7 +1,6 @@
 import { APIRequestContext } from '@playwright/test';
 import { NotificationsController } from 'api/controllers/notifications.controller';
 import { STATUS_CODES } from 'data/status.code';
-import { read } from 'fs';
 import { validateResponse } from 'utils/notifications/validations/responseValidation';
 import { logStep } from 'utils/reporter.utils';
 
@@ -12,12 +11,12 @@ export class NotificationsApiService {
   }
 
   @logStep('Get all notifications via API')
-  async getAll(token: string, readFilter?: boolean) {
+  async getAll(token: string, read?: boolean) {
     const response = await this.controller.getAll(token);
     validateResponse(response, STATUS_CODES.OK, true, null);
     let notifications = response.body.Notifications;
-    if (readFilter !== undefined) {
-      notifications = notifications.filter((notification: any) => notification.read === readFilter);
+    if (read !== undefined) {
+      notifications = notifications.filter((notification: any) => notification.read === read);
     }
     return notifications;
   }
