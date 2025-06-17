@@ -80,3 +80,7 @@ export type ordersSortField =
 export interface IProductOrder extends IProduct {
   received: boolean;
 }
+export interface ICreateOrdersData {
+  customer: string;
+  products: string[];
+}

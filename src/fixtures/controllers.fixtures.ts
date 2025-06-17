@@ -8,7 +8,7 @@ interface IControllerFixtures {
   customerController: CustomersController;
   productController: ProductsController;
   signInController: SignInController;
-  notificationController: NotificationsController
+  notificationController: NotificationsController;
 }
 
 export const test = base.extend<IControllerFixtures>({
