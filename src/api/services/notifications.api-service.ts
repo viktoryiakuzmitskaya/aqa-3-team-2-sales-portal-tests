@@ -21,7 +21,7 @@ export class NotificationsApiService {
   async markAsRead(notificationId: string, token: string) {
     const response = await this.controller.markAsRead(notificationId, token);
     validateResponse(response, STATUS_CODES.OK, true, null);
-    const updatedNotification = response.body.Notifications.find(n => n._id === notificationId);
+    const updatedNotification = response.body.Notifications.find((n) => n._id === notificationId);
     return updatedNotification;
   }
 

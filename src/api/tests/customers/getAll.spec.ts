@@ -1,7 +1,7 @@
 import { ERRORS } from 'data/errorMessages';
 import { getCustomerSchemaAll } from 'data/schemas/customers/get.customers.all.schema';
 import { STATUS_CODES } from 'data/status.code';
-import { TAGS } from 'data/tages';
+import { TAGS } from 'data/tags';
 import { expect, test } from 'fixtures';
 import { validateResponse } from 'utils/notifications/validations/responseValidation';
 import { validateSchema } from 'utils/notifications/validations/schemaValidation';

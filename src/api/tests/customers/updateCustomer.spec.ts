@@ -6,13 +6,13 @@ import {
 } from 'data/customers/customer-invalid.data';
 import { ERRORS } from 'data/errorMessages';
 import { STATUS_CODES } from 'data/status.code';
-import { TAGS } from 'data/tages';
 import { test } from 'fixtures';
 import { ICustomer } from 'types/customer.types';
 import { validateResponse } from 'utils/notifications/validations/responseValidation';
 import { validateSchema } from 'utils/notifications/validations/schemaValidation';
 import { baseSchema } from 'data/schemas/base.schema';
 import { putCustomersSchema } from 'data/schemas/customers/update.customers.schema';
+import { TAGS } from 'data/tags';
 
 test.describe('[API] [Customers] Update the customer by ID', () => {
   let token = '';

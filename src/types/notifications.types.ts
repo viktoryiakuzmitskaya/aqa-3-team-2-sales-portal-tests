@@ -19,10 +19,8 @@ export interface INotificationsResponse extends IResponseFields {
   Notifications: INotificationFromResponse[];
 }
 
-export type NotificationType = 
-  | 'unassigned' 
-  | 'assigned' 
+export type NotificationType = 'unassigned' | 'assigned';
 
-export type NotificationMessage = 
-  | 'You have been unassigned from order' 
-  | 'You have been assigned to order' 
+export type NotificationMessage =
+  | 'You have been unassigned from order'
+  | 'You have been assigned to order';
