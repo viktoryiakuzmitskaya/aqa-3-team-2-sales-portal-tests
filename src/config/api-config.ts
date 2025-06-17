@@ -7,6 +7,17 @@ export const apiConfig = {
     PRODUCTS: '/api/products',
     PRODUCTS_ALL: '/api/products/all',
     PRODUCT_BY_ID: (id: string) => `/api/products/${id}/`,
+    ORDERS: '/api/orders',
+    ORDER_BY_ID: (orderId: string) => `/api/orders/${orderId}/`,
+    ASSING_MANAGER: (orderId: string, managerId: string) =>
+      `/api/orders/${orderId}/assign-manager/${managerId}`,
+    UNASSIGN_MANAGER: (orderId: string) => `/api/orders/${orderId}/unassign-manager`,
+    POST_COMMENT: (orderId: string) => `/api/orders/${orderId}/comments`,
+    DELETE_COMMENT: (orderId: string, commentId: string) =>
+      `/api/orders/${orderId}/comments/${commentId}`,
+    UPDATE_DELIVERY: (orderId: string) => `/api/orders/${orderId}/delivery`,
+    RECEIVE_ORDER: (orderId: string) => `/api/orders/${orderId}/receive`,
+    UPDATE_STATUS: (orderId: string) => `/api/orders/${orderId}/status`,
     LOGIN: '/api/login',
     ORDERS: '/api/orders',
     ORDER_BY_ID: (id: string) => `/api/orders/${id}/`,
