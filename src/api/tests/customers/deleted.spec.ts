@@ -1,6 +1,6 @@
 import { ERRORS } from 'data/errorMessages';
 import { STATUS_CODES } from 'data/status.code';
-import { TAGS } from 'data/tages';
+import { TAGS } from 'data/tags';
 import { expect, test } from 'fixtures';
 import { ICustomerFromResponse } from 'types/customer.types';
 import { validateResponse } from 'utils/notifications/validations/responseValidation';

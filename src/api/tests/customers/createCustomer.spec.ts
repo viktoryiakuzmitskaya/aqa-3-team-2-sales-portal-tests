@@ -5,13 +5,13 @@ import {
   invalidTestCasesWithoutToken,
 } from 'data/customers/customer-invalid.data';
 import { STATUS_CODES } from 'data/status.code';
-import { TAGS } from 'data/tages';
 import { test } from 'fixtures';
 import { validateResponse } from 'utils/notifications/validations/responseValidation';
 import { ERRORS } from 'data/errorMessages';
 import { validateSchema } from 'utils/notifications/validations/schemaValidation';
 import { baseSchema } from 'data/schemas/base.schema';
 import { postCustomerSchema } from 'data/schemas/customers/create.customers.schema';
+import { TAGS } from 'data/tags';
 
 test.describe('[API] [Customers] Create a new customer', () => {
   let token = '';
