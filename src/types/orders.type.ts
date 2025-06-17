@@ -33,9 +33,12 @@ export interface IHistory {
   total_price: number;
 }
 
-export interface ICommentFromResponse {
-  _id: string;
+export interface IComment {
   text: string;
+}
+
+export interface ICommentFromResponse extends IComment {
+  _id: string;
   createdOn: string;
 }
 
