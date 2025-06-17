@@ -8,5 +8,11 @@ export const apiConfig = {
     PRODUCTS_ALL: '/api/products/all',
     PRODUCT_BY_ID: (id: string) => `/api/products/${id}/`,
     LOGIN: '/api/login',
+    ORDERS: '/api/orders',
+    ORDER_BY_ID: (id: string) => `/api/orders/${id}/`,
+    ASSIGN_MANAGER: (orderId: string, managerId: string) =>
+      `/api/orders/${orderId}/assign-manager/${managerId}/`,
+    ORDER_DELIVERY: (id: string) => `/api/orders/${id}/delivery/`,
+    ORDER_RECEIVE: (id: string) => `/api/orders/${id}/receive/`,
   },
 } as const;
