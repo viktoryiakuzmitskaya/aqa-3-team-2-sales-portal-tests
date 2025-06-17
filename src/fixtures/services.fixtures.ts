@@ -1,7 +1,7 @@
 import { test as base } from '@playwright/test';
-import { CustomersApiService } from '../services/customers.api-service';
-import { ProductsApiService } from 'services/products.api-service';
-import { SignInApiService } from 'services/signIn.api-service';
+import { CustomersApiService } from '../api/services/customers.api-service';
+import { ProductsApiService } from 'api/services/products.api-service';
+import { SignInApiService } from 'api/services/signIn.api-service';
 
 interface IServiceFixtures {
   customerService: CustomersApiService;
