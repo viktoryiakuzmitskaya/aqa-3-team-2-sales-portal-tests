@@ -4,7 +4,7 @@ import { customerSchema } from './customer.schema';
 const postCustomerSchema = {
   type: 'object',
   properties: {
-    ...baseSchema,
+    ...baseSchema.properties,
     Customer: customerSchema,
   },
   required: ['IsSuccess', 'ErrorMessage', 'Customer'],

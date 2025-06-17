@@ -7,12 +7,12 @@ import prettierPlugin from 'eslint-plugin-prettier';
 
 export default defineConfig([
   {
-    files: ['**/*.{js,mjs,cjs,ts,mts,cts}'],
+    files: ['./src/**/*.{js,mjs,cjs,ts,mts,cts}'],
     plugins: { js },
     extends: ['js/recommended'],
   },
   {
-    files: ['**/*.{js,mjs,cjs,ts,mts,cts}'],
+    files: ['./src/**/*.{js,mjs,cjs,ts,mts,cts}'],
     languageOptions: { globals: globals.browser },
   },
   tseslint.configs.recommended,
@@ -28,6 +28,6 @@ export default defineConfig([
     },
   },
   {
-    ignores: ['dist', 'node_modules', 'eslint.config.mjs', 'eslint.config.mjs'],
+    ignores: ['dist', 'node_modules', 'eslint.config.mjs', 'eslint.config.mjs','test-results','playwright-report','.husky','allure-results','allure-report'],
   },
 ]);
