@@ -4,7 +4,6 @@ import { apiConfig } from 'config/api-config';
 import { IRequestOptions } from 'types/api.types';
 import {
   ICreateOrdersData,
-  IOrder,
   IOrderResponse,
   IOrdersResponse,
   IComment,
@@ -33,7 +32,7 @@ export class OrdersController {
         Authorization: `Bearer ${token}`,
       },
     };
-    return await this.request.send<IOrder>(options);
+    return await this.request.send<IOrderResponse>(options);
   }
   @logStep()
   async getByIdOrder(id: string, token: string) {
@@ -157,7 +156,7 @@ export class OrdersController {
   }
 
   @logStep()
-  async receiveOrder(orderId: string, products: IProductOrder[], token: string) {
+  async receiveOrder(orderId: string, products: IProductOrder['_id'][], token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
       url: apiConfig.ENDPOINTS.RECEIVE_ORDER(orderId),
