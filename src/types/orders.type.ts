@@ -82,6 +82,7 @@ export type ordersSortField =
   | 'assignedManager';
 export interface IProductOrder extends IProduct {
   received: boolean;
+  _id: string;
 }
 export interface ICreateOrdersData {
   customer: string;
