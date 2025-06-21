@@ -1,4 +1,5 @@
 import { test, expect } from 'fixtures';
+import _ from 'lodash';
 import { STATUS_CODES } from 'data/status.code';
 import { validateSchema } from 'utils/notifications/validations/schemaValidation';
 import { validateResponse } from 'utils/notifications/validations/responseValidation';
@@ -25,13 +26,10 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
         validateResponse(response, STATUS_CODES.OK, true, null);
         validateSchema(productsSchema, response.body);
 
-        const foundProduct = response.body.Products.find((p) => p._id === product._id);
+        const foundProduct = _.find(response.body.Products, { _id: product._id });
 
         expect(foundProduct).toBeDefined();
-
-        const { ...productBodyWithoutNotes } = product;
-
-        expect(foundProduct).toMatchObject(productBodyWithoutNotes);
+        expect(foundProduct).toMatchObject(_.omit(product, 'notes'));
       },
     );
 
@@ -61,7 +59,7 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
         validateSchema(productsSchema, response.body);
 
         expect(
-          response.body.Products.every((p) => p.manufacturer === product.manufacturer),
+          _.every(response.body.Products, { manufacturer: product.manufacturer }),
         ).toBeTruthy();
       },
     );
@@ -85,10 +83,10 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
 
           validateResponse(response, STATUS_CODES.OK, true, null);
           validateSchema(productsSchema, response.body);
-          const productIds = createdProducts.map((p) => p._id);
-          const responseIds = response.body.Products.map((p) => p._id);
+          const productIds = _.map(createdProducts, '_id');
+          const responseIds = _.map(response.body.Products, '_id');
 
-          expect(productIds.every((id) => responseIds.includes(id))).toBeTruthy();
+          expect(_.difference(productIds, responseIds)).toEqual([]);
         } finally {
           for (const product of createdProducts) {
             await productService.delete(product._id, token);
@@ -106,7 +104,7 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
         validateResponse(response, STATUS_CODES.OK, true, null);
         validateSchema(productsSchema, response.body);
 
-        expect(response.body.Products.some((p) => p._id === product._id)).toBeTruthy();
+        expect(_.some(response.body.Products, { _id: product._id })).toBeTruthy();
       },
     );
 
