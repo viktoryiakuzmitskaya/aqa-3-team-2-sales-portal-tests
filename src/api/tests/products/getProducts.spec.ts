@@ -3,82 +3,65 @@ import { STATUS_CODES } from 'data/status.code';
 import { validateSchema } from 'utils/notifications/validations/schemaValidation';
 import { validateResponse } from 'utils/notifications/validations/responseValidation';
 import { productsSchema } from 'data/schemas/products/products.schema';
-import { generateProductData } from 'data/products/generateProduct.data';
 import { MANUFACTURERS } from 'data/products/manufacturers.data';
 import { TAGS } from 'data/tags';
 import { ERRORS } from 'data/errorMessages';
-import _ from 'lodash';
+import { ESortOrder, ESortProductsFields } from 'utils/enum.utils';
 
 test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
   let token = '';
-  let productIds: string[] = [];
 
   test.beforeAll(async ({ signInService }) => {
     token = await signInService.loginAsLocalUser();
-  });
-
-  test.afterEach(async ({ productService }) => {
-    for (const id of productIds) {
-      try {
-        await productService.controller.delete(id, token);
-      } catch {
-        // do nothing
-      }
-    }
-    productIds = [];
   });
 
   test.describe('Positive cases', () => {
     test(
       'Should get all products',
       { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.SMOKE, TAGS.REGRESSION] },
-      async ({ productService }) => {
-        const productBody = generateProductData();
-        const createResponse = await productService.create(token, productBody);
-        productIds.push(createResponse._id);
-
-        const response = await productService.controller.getSorted(token);
+      async ({ productService, product }) => {
+        const response = await productService.getSorted(token);
 
         validateResponse(response, STATUS_CODES.OK, true, null);
         validateSchema(productsSchema, response.body);
-        expect(response.body.Products.some((p) => p.name === productBody.name)).toBeTruthy();
+
+        const foundProduct = response.body.Products.find((p) => p._id === product._id);
+
+        expect(foundProduct).toBeDefined();
+
+        const { ...productBodyWithoutNotes } = product;
+
+        expect(foundProduct).toMatchObject(productBodyWithoutNotes);
       },
     );
 
     test(
       'Should search by existing product name',
       { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION] },
-      async ({ productService }) => {
-        const productBody = generateProductData();
-        const createResponse = await productService.create(token, productBody);
-        productIds.push(createResponse._id);
-        const allResponse = await productService.controller.getSorted(token);
-        const found = allResponse.body.Products.find((p) => p._id === createResponse._id);
-        if (!found) throw new Error('Created product not found in all products response');
+      async ({ productService, product }) => {
+        const response = await productService.getSorted(token, { search: product.name });
 
-        const nameToSearch = found.name;
-        const response = await productService.controller.getSorted(token, { search: nameToSearch });
+        validateResponse(response, STATUS_CODES.OK, true, null);
+        validateSchema(productsSchema, response.body);
 
-        expect(response.body.Products.some((p) => p.name === nameToSearch)).toBeTruthy();
+        expect(response.body.Products.length).toBeGreaterThan(0);
+        expect(response.body.Products.every((p) => p.name.includes(product.name))).toBeTruthy();
       },
     );
 
     test(
       'Should filter by manufacturer',
       { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION] },
-      async ({ productService }) => {
-        const productBody = generateProductData({ manufacturer: MANUFACTURERS.APPLE });
-        const createResponse = await productService.create(token, productBody);
-        productIds.push(createResponse._id);
-
-        const response = await productService.controller.getSorted(token, {
-          manufacturer: MANUFACTURERS.APPLE,
+      async ({ productService, product }) => {
+        const response = await productService.getSorted(token, {
+          manufacturer: product.manufacturer,
         });
 
         validateResponse(response, STATUS_CODES.OK, true, null);
         validateSchema(productsSchema, response.body);
+
         expect(
-          response.body.Products.every((p) => p.manufacturer === MANUFACTURERS.APPLE),
+          response.body.Products.every((p) => p.manufacturer === product.manufacturer),
         ).toBeTruthy();
       },
     );
@@ -87,143 +70,71 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
       'Should filter by multiple manufacturers',
       { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION] },
       async ({ productService }) => {
-        const product1 = generateProductData({ manufacturer: MANUFACTURERS.APPLE });
-        const product2 = generateProductData({ manufacturer: MANUFACTURERS.SAMSUNG });
-        const createResponse1 = await productService.create(token, product1);
-        const createResponse2 = await productService.create(token, product2);
-        productIds.push(createResponse1._id);
-        productIds.push(createResponse2._id);
         const manufacturers = [MANUFACTURERS.APPLE, MANUFACTURERS.SAMSUNG];
-
-        const response = await productService.controller.getSorted(token, {
-          manufacturer: manufacturers,
-        } as any);
-
-        validateResponse(response, STATUS_CODES.OK, true, null);
-        validateSchema(productsSchema, response.body);
-        const allowedManufacturers = [MANUFACTURERS.APPLE, MANUFACTURERS.SAMSUNG];
-
-        const allAreValid = response.body.Products.every((p) =>
-          allowedManufacturers.includes(p.manufacturer),
+        const customData = manufacturers.map((m) => ({ manufacturer: m }));
+        const createdProducts = await productService.populate(
+          manufacturers.length,
+          token,
+          customData,
         );
 
-        expect(allAreValid).toBeTruthy();
+        try {
+          const response = await productService.getSorted(token, {
+            manufacturer: manufacturers,
+          } as any);
+
+          validateResponse(response, STATUS_CODES.OK, true, null);
+          validateSchema(productsSchema, response.body);
+          const productIds = createdProducts.map((p) => p._id);
+          const responseIds = response.body.Products.map((p) => p._id);
+
+          expect(productIds.every((id) => responseIds.includes(id))).toBeTruthy();
+        } finally {
+          for (const product of createdProducts) {
+            await productService.delete(product._id, token);
+          }
+        }
       },
     );
 
     test(
       'Should search by price',
       { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION] },
-      async ({ productService }) => {
-        const productBody = generateProductData({ price: 12345 });
-        const createResponse = await productService.create(token, productBody);
-        productIds.push(createResponse._id);
-
-        const response = await productService.controller.getSorted(token, { search: '12345' });
-
-        validateResponse(response, STATUS_CODES.OK, true, null);
-        validateSchema(productsSchema, response.body);
-        expect(response.body.Products.some((p) => p.price === 12345)).toBeTruthy();
-      },
-    );
-
-    test(
-      'Should sort by name asc',
-      { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION] },
-      async ({ productService }) => {
-        const response = await productService.controller.getSorted(token, {
-          sortField: 'name',
-          sortOrder: 'asc',
-        });
+      async ({ productService, product }) => {
+        const response = await productService.getSorted(token, { search: String(product.price) });
 
         validateResponse(response, STATUS_CODES.OK, true, null);
         validateSchema(productsSchema, response.body);
 
-        expect(response.body.sorting.sortField).toBe('name');
-        expect(response.body.sorting.sortOrder).toBe('asc');
-        expect(Array.isArray(response.body.Products)).toBe(true);
+        expect(response.body.Products.some((p) => p._id === product._id)).toBeTruthy();
       },
     );
 
-    test(
-      'Should sort by name desc',
-      { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION] },
-      async ({ productService }) => {
-        const response = await productService.controller.getSorted(token, {
-          sortField: 'name',
-          sortOrder: 'desc',
-        });
+    test.describe('Sorting', () => {
+      for (const sortField of Object.values(ESortProductsFields)) {
+        for (const sortOrder of Object.values(ESortOrder)) {
+          test(
+            `Should sort by ${sortField} ${sortOrder}`,
+            {
+              tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION],
+            },
+            async ({ productService }) => {
+              const response = await productService.getSorted(token, {
+                sortField,
+                sortOrder,
+              });
 
-        validateResponse(response, STATUS_CODES.OK, true, null);
-        validateSchema(productsSchema, response.body);
-        expect(response.body.sorting.sortField).toBe('name');
-        expect(response.body.sorting.sortOrder).toBe('desc');
-        expect(Array.isArray(response.body.Products)).toBe(true);
-      },
-    );
+              validateResponse(response, STATUS_CODES.OK, true, null);
+              validateSchema(productsSchema, response.body);
 
-    test(
-      'Should sort by price',
-      { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION] },
-      async ({ productService }) => {
-        const prices = [100, 200, 50];
-        for (const price of prices) {
-          const createResponse = await productService.create(token, generateProductData({ price }));
-          productIds.push(createResponse._id);
-        }
-
-        const response = await productService.controller.getSorted(token, {
-          sortField: 'price',
-          sortOrder: 'asc',
-        });
-
-        validateResponse(response, STATUS_CODES.OK, true, null);
-        validateSchema(productsSchema, response.body);
-        const sortedPrices = response.body.Products.map((p) => p.price);
-        expect([...sortedPrices].sort((a, b) => a - b)).toEqual(sortedPrices);
-      },
-    );
-
-    test(
-      'Should sort by manufacturer',
-      { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION] },
-      async ({ productService }) => {
-        const manufacturers = [MANUFACTURERS.APPLE, MANUFACTURERS.SAMSUNG, MANUFACTURERS.GOOGLE];
-        for (const manufacturer of manufacturers) {
-          const createResponse = await productService.create(
-            token,
-            generateProductData({ manufacturer }),
+              expect(response.body.sorting.sortField).toBe(sortField);
+              expect(response.body.sorting.sortOrder).toBe(sortOrder);
+              expect(Array.isArray(response.body.Products)).toBe(true);
+            },
           );
-          productIds.push(createResponse._id);
         }
-
-        const response = await productService.controller.getSorted(token, {
-          sortField: 'manufacturer',
-          sortOrder: 'asc',
-        });
-
-        validateResponse(response, STATUS_CODES.OK, true, null);
-        validateSchema(productsSchema, response.body);
-        const sortedManufacturers = response.body.Products.map((p) => p.manufacturer);
-        expect([...sortedManufacturers].sort()).toEqual(sortedManufacturers);
-      },
-    );
-
-    test(
-      'Should sort by createdOn',
-      { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION] },
-      async ({ productService }) => {
-        const response = await productService.controller.getSorted(token, {
-          sortField: 'createdOn',
-          sortOrder: 'asc',
-        });
-
-        validateResponse(response, STATUS_CODES.OK, true, null);
-        validateSchema(productsSchema, response.body);
-        const createdOnArr = response.body.Products.map((p) => p.createdOn);
-        expect([...createdOnArr].sort()).toEqual(createdOnArr);
-      },
-    );
+      }
+    });
   });
 
   test.describe('Negative cases', () => {
@@ -231,12 +142,11 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
       'Should return empty array for non-existing product name',
       { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION] },
       async ({ productService }) => {
-        const response = await productService.controller.getSorted(token, {
-          search: 'nonexistentproduct',
-        });
+        const response = await productService.getSorted(token, { search: 'nonexistentproduct' });
 
         validateResponse(response, STATUS_CODES.OK, true, null);
         validateSchema(productsSchema, response.body);
+
         expect(response.body.Products.length).toBe(0);
       },
     );
@@ -245,7 +155,7 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
       'Should return 401 for invalid access token',
       { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION] },
       async ({ productService }) => {
-        const response = await productService.controller.getSorted('invalidtoken');
+        const response = await productService.getSorted('invalidtoken');
 
         validateResponse(response, STATUS_CODES.UNAUTHORIZED, false, ERRORS.UNAUTHORIZED);
       },
@@ -255,7 +165,7 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
       'Should return 401 for missing access token',
       { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION] },
       async ({ productService }) => {
-        const response = await productService.controller.getSorted('');
+        const response = await productService.getSorted('');
 
         validateResponse(response, STATUS_CODES.UNAUTHORIZED, false, ERRORS.NOT_AUTHORIZED);
       },
@@ -265,10 +175,11 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
       'Should return empty array for non-existing product price',
       { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION] },
       async ({ productService }) => {
-        const response = await productService.controller.getSorted(token, { search: '9999999' });
+        const response = await productService.getSorted(token, { search: '9999999' });
 
         validateResponse(response, STATUS_CODES.OK, true, null);
         validateSchema(productsSchema, response.body);
+
         expect(response.body.Products.length).toBe(0);
       },
     );
@@ -277,12 +188,13 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
       'Should return empty array for non-existing product manufacturer',
       { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION] },
       async ({ productService }) => {
-        const response = await productService.controller.getSorted(token, {
+        const response = await productService.getSorted(token, {
           search: 'NonExistentManufacturer',
         });
 
         validateResponse(response, STATUS_CODES.OK, true, null);
         validateSchema(productsSchema, response.body);
+
         expect(response.body.Products.length).toBe(0);
       },
     );

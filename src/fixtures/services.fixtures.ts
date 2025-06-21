@@ -2,11 +2,14 @@ import { test as base } from '@playwright/test';
 import { CustomersApiService } from '../services/customers.api-service';
 import { ProductsApiService } from 'services/products.api-service';
 import { SignInApiService } from 'services/signIn.api-service';
+import { IProductFromResponse } from 'types/products.types';
+import { generateProductData } from 'data/products/generateProduct.data';
 
 interface IServiceFixtures {
   customerService: CustomersApiService;
   productService: ProductsApiService;
   signInService: SignInApiService;
+  product: IProductFromResponse;
 }
 
 export const test = base.extend<IServiceFixtures>({
@@ -19,6 +22,16 @@ export const test = base.extend<IServiceFixtures>({
   },
   signInService: async ({ request }, use) => {
     await use(new SignInApiService(request));
+  },
+  product: async ({ productService, signInService }, use) => {
+    const token = await signInService.loginAsLocalUser();
+    const product = await productService.create(token, generateProductData());
+    await use(product);
+    try {
+      await productService.controller.delete(product._id, token);
+    } catch (error) {
+      console.error(`Failed to delete product ${product._id}:`, error);
+    }
   },
 });
 
