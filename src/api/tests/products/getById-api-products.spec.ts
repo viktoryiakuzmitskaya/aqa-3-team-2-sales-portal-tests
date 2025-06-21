@@ -38,7 +38,7 @@ test.describe('[API] [Products] GET /api/products/{id}', () => {
     productIds.add(productId);
   });
 
-  test('Should not found an ivalid product', async ({ productController }) => {
+  test('Should not found product using an invalid id', async ({ productController }) => {
     const invalidProductId = faker.database.mongodbObjectId();
     const getByIdResponse = await productController.getById(invalidProductId, token);
     expect.soft(getByIdResponse.status).toBe(STATUS_CODES.NOT_FOUND);
