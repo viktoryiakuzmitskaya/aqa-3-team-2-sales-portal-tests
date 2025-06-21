@@ -24,7 +24,7 @@ test.describe('[API] [Products] DELETE /api/products/{id}', () => {
 
     const deleteResponse = await productController.delete(productId, token);
     expect.soft(deleteResponse.status).toBe(STATUS_CODES.DELETED);
-    expect.soft(deleteResponse.body).not.toBeTruthy();
+    expect.soft(deleteResponse.body).toBeFalsy();
   });
 
   test('Should 404 status response, with non-existing product', async ({ productController }) => {
