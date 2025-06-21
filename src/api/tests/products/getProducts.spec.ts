@@ -71,8 +71,13 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
     const response = await productService.controller.getSorted(token, { manufacturer: manufacturers } as any);
     validateResponse(response, STATUS_CODES.OK, true, null);
     validateSchema(productsSchema, response.body);
-    expect(response.body.Products.some((p) => p.manufacturer === MANUFACTURERS.APPLE)).toBeTruthy();
-    expect(response.body.Products.some((p) => p.manufacturer === MANUFACTURERS.SAMSUNG)).toBeTruthy();
+const allowedManufacturers = [MANUFACTURERS.APPLE, MANUFACTURERS.SAMSUNG];
+
+const allAreValid = response.body.Products.every((p) =>
+  allowedManufacturers.includes(p.manufacturer)
+);
+
+expect(allAreValid).toBeTruthy();
   });
 
   test('Should search by price', { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION] }, async ({ productService }) => {
