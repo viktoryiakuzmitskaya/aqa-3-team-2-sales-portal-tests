@@ -1,7 +1,5 @@
-import { USER_LOGIN, USER_PASSWORD } from 'config/environment';
 import { test, expect } from 'fixtures/index';
 import { STATUS_CODES } from 'data/status.code';
-import { IAPICredentials } from 'types/signIn.types';
 import { generateProductData } from 'data/products/generateProduct.data';
 import { validateSchema } from 'utils/notifications/validations/schemaValidation';
 import { faker } from '@faker-js/faker';
@@ -9,13 +7,17 @@ import { ERRORS } from 'data/errorMessages';
 import { productsAllSchema } from 'data/schemas/products/products.all.schema';
 
 test.describe('[API] [Products] GET /api/products/all', () => {
-  const user: IAPICredentials = { username: USER_LOGIN, password: USER_PASSWORD };
   let token: string;
+  let productId: string;
 
-  test.beforeEach(async ({ signInController }) => {
-    const signInResponse = await signInController.signIn(user);
-    token = signInResponse.headers['authorization'];
-    expect.soft(signInResponse.status).toBe(STATUS_CODES.OK);
+  test.beforeEach(async ({ signInService }) => {
+    token = await signInService.loginAsLocalUser();
+  });
+
+  test.afterAll(async ({ productService }) => {
+    if (productId) {
+      await productService.delete(productId, token);
+    }
   });
 
   test('Should find created product in response body', async ({ productController }) => {
@@ -33,8 +35,7 @@ test.describe('[API] [Products] GET /api/products/all', () => {
     expect.soft(find).toMatchObject(productBody as unknown as Record<string, unknown>);
     validateSchema(productsAllSchema, productAllBody);
 
-    const deleteCustomer = await productController.delete(productBodyId, token);
-    expect.soft(deleteCustomer.status).toBe(STATUS_CODES.DELETED);
+    productId = productBodyId;
   });
 
   test('Should 401 status response, with invalid token', async ({ productController }) => {
