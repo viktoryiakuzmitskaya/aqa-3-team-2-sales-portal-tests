@@ -7,8 +7,7 @@ import { productsSchema } from 'data/schemas/products/products.schema';
 import { MANUFACTURERS } from 'data/products/manufacturers.data';
 import { TAGS } from 'data/tags';
 import { ERRORS } from 'data/errorMessages';
-import { ESortOrder, ESortProductsFields } from 'utils/enum.utils';
-import { IProductFromResponse } from 'types/products.types';
+import { ESortOrder, ESortProductsFields, IProductFromResponse } from 'types/products.types';
 import { faker } from '@faker-js/faker';
 import { genericSort } from '../../../utils/genericSort';
 
@@ -30,9 +29,9 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
         validateSchema(productsSchema, response.body);
 
         const foundProduct = _.find(response.body.Products, { _id: product._id });
-
-        expect(foundProduct).toBeDefined();
-        expect(foundProduct).toMatchObject(_.omit(product, 'notes'));
+        expect(foundProduct, 'Created product should be found in the response').toMatchObject(
+          _.omit(product, 'notes'),
+        );
       },
     );
 
@@ -45,8 +44,14 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
         validateResponse(response, STATUS_CODES.OK, true, null);
         validateSchema(productsSchema, response.body);
 
-        expect(response.body.Products).toHaveLength(1);
-        expect(response.body.Products[0]).toMatchObject(_.omit(product, 'notes'));
+        expect(
+          response.body.Products,
+          'Should return exactly one product when searching by name',
+        ).toHaveLength(1);
+        expect(
+          response.body.Products[0],
+          'Found product should match the created product',
+        ).toMatchObject(_.omit(product, 'notes'));
       },
     );
 
@@ -63,6 +68,7 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
 
         expect(
           _.every(response.body.Products, { manufacturer: product.manufacturer }),
+          'All returned products should have the specified manufacturer',
         ).toBeTruthy();
       },
     );
@@ -89,7 +95,10 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
           const productIds = _.map(createdProducts, '_id');
           const responseIds = _.map(response.body.Products, '_id');
 
-          expect(_.difference(productIds, responseIds)).toEqual([]);
+          expect(
+            _.difference(productIds, responseIds),
+            'All created products should be present in the filtered response',
+          ).toEqual([]);
         } finally {
           for (const product of createdProducts) {
             await productService.delete(product._id, token);
@@ -107,7 +116,10 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
         validateResponse(response, STATUS_CODES.OK, true, null);
         validateSchema(productsSchema, response.body);
 
-        expect(_.some(response.body.Products, { _id: product._id })).toBeTruthy();
+        expect(
+          _.some(response.body.Products, { _id: product._id }),
+          'Product should be found when searching by price',
+        ).toBeTruthy();
       },
     );
 
@@ -138,8 +150,14 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
                 isSorted,
                 `Sorted products should match the expected order for field "${key}"`,
               ).toBe(true);
-              expect(response.body.sorting.sortField).toBe(key);
-              expect(response.body.sorting.sortOrder).toBe(order);
+              expect(
+                response.body.sorting.sortField,
+                `Response should indicate sorting by field "${key}"`,
+              ).toBe(key);
+              expect(
+                response.body.sorting.sortOrder,
+                `Response should indicate sorting in "${order}" order`,
+              ).toBe(order);
             },
           );
         }
@@ -158,7 +176,10 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
         validateResponse(response, STATUS_CODES.OK, true, null);
         validateSchema(productsSchema, response.body);
 
-        expect(response.body.Products.length).toBe(0);
+        expect(
+          response.body.Products.length,
+          'Should return empty array for non-existing product name',
+        ).toBe(0);
       },
     );
 
@@ -195,7 +216,10 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
         validateResponse(response, STATUS_CODES.OK, true, null);
         validateSchema(productsSchema, response.body);
 
-        expect(response.body.Products.length).toBe(0);
+        expect(
+          response.body.Products.length,
+          'Should return empty array for non-existing product price',
+        ).toBe(0);
       },
     );
 
@@ -211,7 +235,10 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
         validateResponse(response, STATUS_CODES.OK, true, null);
         validateSchema(productsSchema, response.body);
 
-        expect(response.body.Products.length).toBe(0);
+        expect(
+          response.body.Products.length,
+          'Should return empty array for non-existing product manufacturer',
+        ).toBe(0);
       },
     );
   });

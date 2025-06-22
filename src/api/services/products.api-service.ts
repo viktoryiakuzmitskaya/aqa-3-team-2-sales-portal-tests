@@ -1,6 +1,6 @@
 import { APIRequestContext } from '@playwright/test';
 import { ProductsController } from 'api/controllers/products.controller';
-import { IProduct, IProductFromResponse } from 'types/products.types';
+import { IProduct, IProductFromResponse, IProductsSearchParams } from 'types/products.types';
 import { generateProductData } from 'data/products/generateProduct.data';
 import { STATUS_CODES } from 'data/status.code';
 import {
@@ -16,8 +16,9 @@ export class ProductsApiService {
     this.controller = new ProductsController(request);
   }
 
-  getSorted(token: string, params?: any) {
-    return this.controller.getSorted(token, params);
+  @logStep('Get sorted products via API')
+  async getSorted(token: string, params?: IProductsSearchParams) {
+    return await this.controller.getSorted(token, params as Record<string, string>);
   }
 
   @logStep('Delete product via API')
@@ -32,6 +33,16 @@ export class ProductsApiService {
     const res = await this.controller.create(productData, token);
     validateResponse(res, STATUS_CODES.CREATED, true, null);
     return res.body.Product;
+  }
+
+  @logStep('Create Product via API (Raw Response)')
+  async createRaw(product: IProduct, token: string) {
+    return await this.controller.create(product, token);
+  }
+
+  @logStep('Update Product via API')
+  async updateById(product: IProduct, id: string, token: string) {
+    return await this.controller.updateById(product, id, token);
   }
 
   async populate(
