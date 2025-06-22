@@ -5,7 +5,7 @@ import {
   invalidTestCasesWithoutToken,
 } from 'data/customers/customer-invalid.data';
 import { STATUS_CODES } from 'data/status.code';
-import { test } from 'fixtures';
+import { test, expect } from 'fixtures';
 import { validateResponse } from 'utils/notifications/validations/responseValidation';
 import { ERRORS } from 'data/errorMessages';
 import { validateSchema } from 'utils/notifications/validations/schemaValidation';
@@ -43,6 +43,19 @@ test.describe('[API] [Customers] Create a new customer', () => {
         },
       );
     });
+
+    test(
+      'Should create customer with valid data',
+      {
+        tag: [TAGS.API, TAGS.CUSTOMERS, TAGS.SMOKE, TAGS.REGRESSION],
+      },
+      async ({ customer: createdCustomerByFixture }) => {
+        expect(createdCustomerByFixture).toBeDefined();
+        expect(typeof createdCustomerByFixture._id).toBe('string');
+        expect(createdCustomerByFixture.name).toBeDefined();
+        expect(createdCustomerByFixture.email).toBeDefined();
+      },
+    );
   });
 
   test.describe('Negative', () => {
@@ -92,6 +105,20 @@ test.describe('[API] [Customers] Create a new customer', () => {
           false,
           ERRORS.CUSTOMER_ALREADY_EXISTS(customer2Data.email),
         );
+      },
+    );
+
+    test(
+      'Should return 401 error when token is empty',
+      {
+        tag: [TAGS.API, TAGS.CUSTOMERS, TAGS.SMOKE, TAGS.REGRESSION],
+      },
+      async ({ customerController }) => {
+        const data = generateCustomerData();
+        const response = await customerController.create(data, '');
+
+        validateSchema(baseSchema, response.body);
+        validateResponse(response, STATUS_CODES.UNAUTHORIZED, false, ERRORS.NOT_AUTHORIZED);
       },
     );
   });

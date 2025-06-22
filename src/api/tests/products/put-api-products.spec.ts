@@ -19,7 +19,7 @@ test.describe(`${TAGS.API} ${TAGS.PRODUCTS} Product Update`, () => {
   test.beforeEach(async ({ signInService, productService }) => {
     token = await signInService.loginAsLocalUser();
     initialProductData = generateProductData();
-    const createProductResponse = await productService.controller.create(initialProductData, token);
+    const createProductResponse = await productService.createRaw(initialProductData, token);
     validateResponse(createProductResponse, STATUS_CODES.CREATED, true, null);
     validateSchema(productSchema, createProductResponse.body);
     productId = createProductResponse.body.Product._id;
@@ -34,7 +34,7 @@ test.describe(`${TAGS.API} ${TAGS.PRODUCTS} Product Update`, () => {
       amount: initialProductData.amount + 1,
       notes: 'updated',
     };
-    const updateProductResponse = await productService.controller.updateById(
+    const updateProductResponse = await productService.updateById(
       updatedProductData,
       productId,
       token,
@@ -54,7 +54,7 @@ test.describe(`${TAGS.API} ${TAGS.PRODUCTS} Product Update`, () => {
       notes: 'updated',
     };
     const invalidToken = 'invalid_token';
-    const updateProductResponse = await productService.controller.updateById(
+    const updateProductResponse = await productService.updateById(
       updatedProductData,
       productId,
       invalidToken,
@@ -68,7 +68,7 @@ test.describe(`${TAGS.API} ${TAGS.PRODUCTS} Product Update`, () => {
       ...initialProductData,
       manufacturer: MANUFACTURERS.GOOGLE,
     };
-    const updateProductResponse = await productService.controller.updateById(
+    const updateProductResponse = await productService.updateById(
       updatedProductData,
       productId,
       token,
@@ -84,7 +84,7 @@ test.describe(`${TAGS.API} ${TAGS.PRODUCTS} Product Update`, () => {
         ...initialProductData,
         amount,
       };
-      const updateProductResponse = await productService.controller.updateById(
+      const updateProductResponse = await productService.updateById(
         updatedProductData,
         productId,
         token,
@@ -101,7 +101,7 @@ test.describe(`${TAGS.API} ${TAGS.PRODUCTS} Product Update`, () => {
         ...initialProductData,
         amount,
       };
-      const updateProductResponse = await productService.controller.updateById(
+      const updateProductResponse = await productService.updateById(
         updatedProductData,
         productId,
         token,
@@ -122,7 +122,7 @@ test.describe(`${TAGS.API} ${TAGS.PRODUCTS} Product Update`, () => {
         ...initialProductData,
         price,
       };
-      const updateProductResponse = await productService.controller.updateById(
+      const updateProductResponse = await productService.updateById(
         updatedProductData,
         productId,
         token,
@@ -139,7 +139,7 @@ test.describe(`${TAGS.API} ${TAGS.PRODUCTS} Product Update`, () => {
         ...initialProductData,
         price,
       };
-      const updateProductResponse = await productService.controller.updateById(
+      const updateProductResponse = await productService.updateById(
         updatedProductData,
         productId,
         token,
@@ -160,7 +160,7 @@ test.describe(`${TAGS.API} ${TAGS.PRODUCTS} Product Update`, () => {
         ...initialProductData,
         name: faker.string.alpha(length),
       };
-      const updateProductResponse = await productService.controller.updateById(
+      const updateProductResponse = await productService.updateById(
         updatedProductData,
         productId,
         token,
@@ -177,7 +177,7 @@ test.describe(`${TAGS.API} ${TAGS.PRODUCTS} Product Update`, () => {
         ...initialProductData,
         name: faker.string.alpha(length),
       };
-      const updateProductResponse = await productService.controller.updateById(
+      const updateProductResponse = await productService.updateById(
         updatedProductData,
         productId,
         token,
@@ -194,8 +194,7 @@ test.describe(`${TAGS.API} ${TAGS.PRODUCTS} Product Update`, () => {
 
   test.afterEach(async ({ productService }) => {
     if (productId) {
-      const deleteResponse = await productService.controller.delete(productId, token);
-      expect.soft(deleteResponse.status).toBe(STATUS_CODES.DELETED);
+      await productService.delete(productId, token);
     }
   });
 });

@@ -35,7 +35,7 @@ const getCustomersSchema = {
       },
       required: ['sortField', 'sortOrder'],
     },
-    ...baseSchema,
+    ...baseSchema.properties,
   },
   required: [
     'Customers',

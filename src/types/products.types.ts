@@ -1,6 +1,18 @@
 import { MANUFACTURERS } from 'data/products/manufacturers.data';
 import { IResponseFields, productsSortField, sortDirection } from './api.types';
 
+export enum ESortOrder {
+  ASC = 'asc',
+  DESC = 'desc',
+}
+
+export enum ESortProductsFields {
+  NAME = 'name',
+  PRICE = 'price',
+  MANUFACTURER = 'manufacturer',
+  CREATED_ON = 'createdOn',
+}
+
 export interface IProduct {
   name: string;
   manufacturer: MANUFACTURERS;
@@ -33,4 +45,13 @@ export interface IProductsSortedResponse extends IResponseFields {
     sortField: productsSortField;
     sortOrder: sortDirection;
   };
+}
+
+export interface IProductsSearchParams {
+  search?: string;
+  manufacturer?: MANUFACTURERS | MANUFACTURERS[];
+  sortField?: productsSortField;
+  sortOrder?: sortDirection;
+  page?: number;
+  limit?: number;
 }
