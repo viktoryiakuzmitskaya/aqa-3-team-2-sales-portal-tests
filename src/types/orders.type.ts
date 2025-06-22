@@ -34,11 +34,12 @@ export interface IHistory {
 }
 
 export interface IComment {
-  text: string;
+  comment: string;
 }
 
 export interface ICommentFromResponse extends IComment {
   _id: string;
+  text: string;
   createdOn: string;
 }
 
