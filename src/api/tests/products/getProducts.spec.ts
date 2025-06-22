@@ -8,6 +8,9 @@ import { MANUFACTURERS } from 'data/products/manufacturers.data';
 import { TAGS } from 'data/tags';
 import { ERRORS } from 'data/errorMessages';
 import { ESortOrder, ESortProductsFields } from 'utils/enum.utils';
+import { IProductFromResponse } from 'types/products.types';
+import { faker } from '@faker-js/faker';
+import { genericSort } from '../../../utils/genericSort';
 
 test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
   let token = '';
@@ -42,8 +45,8 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
         validateResponse(response, STATUS_CODES.OK, true, null);
         validateSchema(productsSchema, response.body);
 
-        expect(response.body.Products.length).toBe(1);
-        expect(response.body.Products.at(-1)).toMatchObject(product);
+        expect(response.body.Products).toHaveLength(1);
+        expect(response.body.Products[0]).toMatchObject(_.omit(product, 'notes'));
       },
     );
 
@@ -109,25 +112,34 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
     );
 
     test.describe('Sorting', () => {
-      for (const sortField of Object.values(ESortProductsFields)) {
-        for (const sortOrder of Object.values(ESortOrder)) {
+      for (const key of Object.values(ESortProductsFields)) {
+        for (const order of Object.values(ESortOrder)) {
           test(
-            `Should sort by ${sortField} ${sortOrder}`,
-            {
-              tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION],
-            },
+            `Should get products sorted by "${key}" in "${order}" order`,
+            { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION] },
             async ({ productService }) => {
               const response = await productService.getSorted(token, {
-                sortField,
-                sortOrder,
+                sortField: key,
+                sortOrder: order,
               });
 
               validateResponse(response, STATUS_CODES.OK, true, null);
               validateSchema(productsSchema, response.body);
 
-              expect(response.body.sorting.sortField).toBe(sortField);
-              expect(response.body.sorting.sortOrder).toBe(sortOrder);
-              expect(Array.isArray(response.body.Products)).toBe(true);
+              const products = response.body.Products;
+              const sortedResponse = genericSort(products, key, order);
+              const isSorted = sortedResponse.every(
+                (p: IProductFromResponse, i: number) =>
+                  p[key as keyof IProductFromResponse] ===
+                  products[i][key as keyof IProductFromResponse],
+              );
+
+              expect(
+                isSorted,
+                `Sorted products should match the expected order for field "${key}"`,
+              ).toBe(true);
+              expect(response.body.sorting.sortField).toBe(key);
+              expect(response.body.sorting.sortOrder).toBe(order);
             },
           );
         }
@@ -140,7 +152,8 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
       'Should return empty array for non-existing product name',
       { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION] },
       async ({ productService }) => {
-        const response = await productService.getSorted(token, { search: 'nonexistentproduct' });
+        const nonExistentProductName = `NonExistent_${faker.string.alpha(10)}`;
+        const response = await productService.getSorted(token, { search: nonExistentProductName });
 
         validateResponse(response, STATUS_CODES.OK, true, null);
         validateSchema(productsSchema, response.body);
@@ -153,7 +166,8 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
       'Should return 401 for invalid access token',
       { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION] },
       async ({ productService }) => {
-        const response = await productService.getSorted('invalidtoken');
+        const invalidToken = faker.string.alpha(20);
+        const response = await productService.getSorted(invalidToken);
 
         validateResponse(response, STATUS_CODES.UNAUTHORIZED, false, ERRORS.UNAUTHORIZED);
       },
@@ -173,7 +187,10 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
       'Should return empty array for non-existing product price',
       { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION] },
       async ({ productService }) => {
-        const response = await productService.getSorted(token, { search: '9999999' });
+        const nonExistentPrice = faker.number.int({ min: 100000, max: 999999 });
+        const response = await productService.getSorted(token, {
+          search: String(nonExistentPrice),
+        });
 
         validateResponse(response, STATUS_CODES.OK, true, null);
         validateSchema(productsSchema, response.body);
@@ -186,8 +203,9 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
       'Should return empty array for non-existing product manufacturer',
       { tag: [TAGS.API, TAGS.PRODUCTS, TAGS.REGRESSION] },
       async ({ productService }) => {
+        const nonExistentManufacturer = `NonExistent_${faker.company.name()}`;
         const response = await productService.getSorted(token, {
-          search: 'NonExistentManufacturer',
+          search: nonExistentManufacturer,
         });
 
         validateResponse(response, STATUS_CODES.OK, true, null);
