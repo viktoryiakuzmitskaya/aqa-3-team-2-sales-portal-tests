@@ -171,7 +171,7 @@ const getCustomerOrderByIdSchema = {
         ],
       },
     },
-    ...baseSchema,
+    ...baseSchema.properties,
   },
   required: ['Orders', 'IsSuccess', 'ErrorMessage'],
 };

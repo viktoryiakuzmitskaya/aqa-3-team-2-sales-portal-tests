@@ -19,7 +19,7 @@ const getCustomerSchemaAll = {
       type: 'array',
       items: customerSchema,
     },
-    ...baseSchema,
+    ...baseSchema.properties,
   },
   required: ['Customers', 'IsSuccess', 'ErrorMessage'],
 };
