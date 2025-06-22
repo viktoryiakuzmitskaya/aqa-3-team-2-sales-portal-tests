@@ -42,8 +42,8 @@ test.describe('[API] [PRODUCTS] [GET] /api/products', () => {
         validateResponse(response, STATUS_CODES.OK, true, null);
         validateSchema(productsSchema, response.body);
 
-        expect(response.body.Products.length).toBeGreaterThan(0);
-        expect(response.body.Products.every((p) => p.name.includes(product.name))).toBeTruthy();
+        expect(response.body.Products.length).toBe(1);
+        expect(response.body.Products.at(-1)).toMatchObject(product);
       },
     );
 
