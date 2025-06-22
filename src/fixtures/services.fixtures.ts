@@ -25,7 +25,7 @@ export const test = base.extend<IServiceFixtures>({
   },
   product: async ({ productService, signInService }, use) => {
     const token = await signInService.loginAsLocalUser();
-    const product = await productService.create(token, generateProductData());
+    const product = await productService.create(token);
     await use(product);
     try {
       await productService.controller.delete(product._id, token);
