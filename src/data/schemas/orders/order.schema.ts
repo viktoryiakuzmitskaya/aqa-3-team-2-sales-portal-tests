@@ -4,9 +4,10 @@ import {
   ORDER_STATUSES,
   ROLES,
 } from 'data/orders/orders.data';
-import { MANUFACTURERS } from 'data/products/manufacturers.data';
 import { customerSchema } from '../customers/customer.schema';
 import { COUNTRIES } from 'data/customers/countries.data';
+import { productItemSchema } from '../products/productItem.schema';
+import { omit } from 'lodash';
 
 export const commentSchema = {
   type: 'object',
@@ -70,15 +71,14 @@ export const deliverySchema = {
 export const productSchema = {
   type: 'object',
   properties: {
-    _id: { type: 'string' },
-    name: { type: 'string' },
-    amount: { type: 'number' },
-    price: { type: 'number' },
-    manufacturer: { type: 'string', enum: Object.values(MANUFACTURERS) },
+    ...omit(productItemSchema.properties, ['createdOn']),
     received: { type: 'boolean' },
-    notes: { type: 'string' },
   },
-  required: ['_id', 'name', 'amount', 'price', 'manufacturer', 'received'],
+  required: [
+    ...productItemSchema.required.filter((key) => key !== 'createdOn'),
+    'received',
+    'notes', 
+  ],
 };
 
 export const orderHistorySchema = {
