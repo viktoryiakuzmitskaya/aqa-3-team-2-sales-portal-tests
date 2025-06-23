@@ -157,13 +157,13 @@ export const invalidTestCases = [
 
 export const invalidTestCasesWithoutToken = [
   {
-    name: 'token is invalid (space string)',
-    token: ' ',
+    name: 'token is invalid (space  string)',
+    invalidToken: ' ',
     expectedMessage: ERRORS.NOT_AUTHORIZED,
   },
   {
     name: 'token is invalid (random string)',
-    token: '12334',
+    invalidToken: '12334',
     expectedMessage: ERRORS.UNAUTHORIZED,
   },
 ];

@@ -6,4 +6,5 @@ export enum TAGS {
   VISUAL_REGRESSION = '@visual_regression',
   PRODUCTS = '@Products',
   CUSTOMERS = '@Customers',
+  ORDER = '@Order',
 }

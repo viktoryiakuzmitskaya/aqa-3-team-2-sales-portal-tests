@@ -138,7 +138,8 @@ export class OrdersApiService {
   @logStep('Add comment via API')
   async postComment(orderId: string, token: string, comment?: string) {
     const text = comment ?? generateCommentText();
-    const response = await this.controller.postComment(orderId, { text }, token);
+    const commentPayload = { comment: text };
+    const response = await this.controller.postComment(orderId, commentPayload, token);
     validateResponse(response, STATUS_CODES.OK, true, null);
     return response.body.Order;
   }
