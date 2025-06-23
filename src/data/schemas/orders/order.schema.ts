@@ -77,7 +77,7 @@ export const productSchema = {
   required: [
     ...productItemSchema.required.filter((key) => key !== 'createdOn'),
     'received',
-    'notes', 
+    'notes',
   ],
 };
 
