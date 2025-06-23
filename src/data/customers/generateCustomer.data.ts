@@ -1,11 +1,12 @@
 import { faker } from '@faker-js/faker';
+import { randomUUID } from 'node:crypto';
 import { ICustomer } from 'types/customer.types';
 import { COUNTRIES } from 'data/customers/countries.data';
 import { getRandromEnumValue } from 'utils/enum.utils';
 
 export function generateCustomerData(params?: Partial<ICustomer>): ICustomer {
   return {
-    email: `test${Date.now()}@gmail.com`,
+    email: `test${Date.now()}-${randomUUID()}@gmail.com`,
     name: `Test ${faker.string.alpha(35)}`,
     country: getRandromEnumValue(COUNTRIES),
     city: `City ${faker.string.alpha(15)}`,
