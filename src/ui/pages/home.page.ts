@@ -21,4 +21,9 @@ export class HomePage extends SalesPortalPage {
 
     await moduleButtons[moduleName].click();
   }
+  @logStep('Open Home page via URL')
+  async open() {
+    await this.openPage('HOME');
+    await this.waitForOpened();
+  }
 }
