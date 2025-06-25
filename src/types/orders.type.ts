@@ -4,7 +4,7 @@ import {
   ORDER_HISTORY_ACTIONS,
   ORDER_STATUSES,
 } from 'data/orders/orders.data';
-import { ICustomerFromResponse } from './customer.types';
+import { ICustomer, ICustomerFromResponse } from './customer.types';
 import { IResponseFields, SORT_ORDERS } from './api.types';
 import { IProduct } from './products.types';
 import { IManager } from './signIn.types';
@@ -49,7 +49,7 @@ export interface IOrder {
   createdOn: string;
   customer: ICustomerFromResponse;
   delivery: IDelivery | null;
-  history: IHistory;
+  history: IHistory[];
   products: IProductOrder[];
   status: ORDER_STATUSES;
   total_price: number;
@@ -88,4 +88,11 @@ export interface IProductOrder extends IProduct {
 export interface ICreateOrdersData {
   customer: string;
   products: string[];
+}
+
+export interface IOrderOptions {
+  customerData?: Partial<ICustomer>;
+  productData?: Partial<IProduct>;
+  productCount?: number;
+  isUniqueProducts?: boolean;
 }

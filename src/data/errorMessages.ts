@@ -10,4 +10,5 @@ export const ERRORS = {
   ORDER_NOT_FOUND: (id: string) => `Order with id '${id}' wasn't found`,
   ORDER_BAD_REQUEST: 'Incorrect request body',
   COMMENT_NOT_FOUND: 'Comment was not found',
+  MANAGER_NOT_FOUND: (id: string) => `Manager with id '${id}' wasn't found`,
 } as const;

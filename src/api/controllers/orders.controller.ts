@@ -96,7 +96,7 @@ export class OrdersController {
         Authorization: `Bearer ${token}`,
       },
     };
-    return await this.request.send<null>(options);
+    return await this.request.send<IOrderResponse>(options);
   }
 
   @logStep()
