@@ -2,7 +2,7 @@ import { APIRequestContext } from '@playwright/test';
 import { OrdersController } from 'api/controllers/orders.controller';
 import { ORDER_STATUSES } from 'data/orders/orders.data';
 import { STATUS_CODES } from 'data/status.code';
-import { ICreateOrdersData, IDelivery } from 'types/orders.type';
+import { ICreateOrdersData, IDelivery, IOrderOptions } from 'types/orders.type';
 import {
   validateDeleteResponse,
   validateResponse,
@@ -148,5 +148,26 @@ export class OrdersApiService {
   async deleteComment(orderId: string, commentId: string, token: string) {
     const response = await this.controller.deleteComment(orderId, commentId, token);
     validateResponse(response, STATUS_CODES.DELETED, true, null);
+  }
+
+  @logStep('Create canceled order w/o delivery and get order via API')
+  async createCanceled(token: string, options?: IOrderOptions) {
+    const productCount = options?.productCount ?? 1;
+    const draftOrder = await this.createDraftOrder(token, productCount);
+    return await this.updateStatus(draftOrder._id, ORDER_STATUSES.CANCELED, token);
+  }
+
+  @logStep('Assign manager to order via API')
+  async assignManager(orderId: string, managerId: string, token: string) {
+    const response = await this.controller.updateAssignManager(orderId, managerId, token);
+    validateResponse(response, STATUS_CODES.OK, true, null);
+    return response.body.Order;
+  }
+
+  @logStep('Unassign manager from order via API')
+  async unassignManager(orderId: string, token: string) {
+    const response = await this.controller.unassignManager(orderId, token);
+    validateResponse(response, STATUS_CODES.OK, true, null);
+    return response.body.Order;
   }
 }
