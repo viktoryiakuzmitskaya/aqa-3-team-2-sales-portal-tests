@@ -34,7 +34,7 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
         headless: true,
       },
-      testDir: 'src/ui/tests/SalesPortal/',
+      testDir: 'src/ui/tests/',
       testMatch: /.*\.setup\.ts/,
     },
     {
@@ -48,9 +48,9 @@ export default defineConfig({
       name: 'sales-portal-ui',
       use: {
         ...devices['Desktop Chrome'],
-        storageState: 'src/.auth/user.json',
+        // storageState: 'src/.auth/user.json',
       },
-      dependencies: ['setup'],
+      // dependencies: ['setup'],
       testDir: './src/ui/tests',
     },
   ],
