@@ -23,15 +23,14 @@ export class DeliverTab extends Tab {
 
   @logStep('Get Delivery Information')
   async getDeliveryDetails(): Promise<IDelivery> {
-    const getDetail = async (label: string) => await this.deliveryDetailValue(label).innerText();
     const [country, city, street, house, flat, finalDate, condition] = await Promise.all([
-      getDetail('Country'),
-      getDetail('City'),
-      getDetail('Street'),
-      getDetail('House'),
-      getDetail('Flat'),
-      getDetail('Delivery Date'),
-      getDetail('Delivery Type'),
+      this.deliveryDetailValue('Country').innerText(),
+      this.deliveryDetailValue('City').innerText(),
+      this.deliveryDetailValue('Street').innerText(),
+      this.deliveryDetailValue('House').innerText(),
+      this.deliveryDetailValue('Flat').innerText(),
+      this.deliveryDetailValue('Delivery Date').innerText(),
+      this.deliveryDetailValue('Delivery Type').innerText(),
     ]);
     return {
       address: {
