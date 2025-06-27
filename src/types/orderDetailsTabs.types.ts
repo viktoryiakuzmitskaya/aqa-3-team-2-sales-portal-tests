@@ -1,1 +1,1 @@
-export type OrderDetalsTab = 'Delivery' | 'Order History' | 'Comments';
+export type OrderDetailsTab = 'Delivery' | 'Order History' | 'Comments';
