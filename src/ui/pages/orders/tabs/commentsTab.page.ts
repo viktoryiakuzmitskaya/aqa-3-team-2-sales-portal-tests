@@ -1,7 +1,7 @@
 import { Tab } from './tab.page';
 import { Locator } from '@playwright/test';
 import { logStep } from 'utils/reporter.utils';
-import { IComment, ICommentFromResponse } from 'types/orders.type';
+import { ICommentFromResponse } from 'types/orders.type';
 export class DeliveryTab extends Tab {
   readonly uniqueElement = this.page.locator('#comments');
   readonly createButton = this.uniqueElement.locator('#create-comment-btn');
