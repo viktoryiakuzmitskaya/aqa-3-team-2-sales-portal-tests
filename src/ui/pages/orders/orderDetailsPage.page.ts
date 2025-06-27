@@ -1,5 +1,5 @@
 import { SalesPortalPage } from '../salesPortal.page';
-import { DeliverTab } from './tabs/deliveryTab.page';
+import { DeliveryTab } from './tabs/deliveryTab.page';
 import { logStep } from 'utils/reporter.utils';
 import { OrderDetailsTab } from 'types/orderDetailsTabs.types';
 
@@ -8,7 +8,7 @@ export class OrderDetailsPage extends SalesPortalPage {
   readonly orderDetailsNavigation = this.page.locator('#order-details-tabs');
   readonly navigationItem = (name: OrderDetailsTab) =>
     this.orderDetailsNavigation.locator('button.nav-link', { hasText: name });
-  readonly deliveryTab = new DeliverTab(this.page);
+  readonly deliveryTab = new DeliveryTab(this.page);
 
   uniqueElement = this.title;
 
