@@ -154,3 +154,13 @@ export const orderSchema = {
     'assignedManager',
   ],
 };
+
+export const orderSchemaResponse = {
+  type: 'object',
+  properties: {
+    IsSuccess: { type: 'boolean' },
+    ErrorMessage: { type: ['string', 'null'] },
+    Order: orderSchema,
+  },
+  required: ['IsSuccess', 'ErrorMessage', 'Order'],
+};
