@@ -1,5 +1,6 @@
 import { SalesPortalPage } from '../salesPortal.page';
 import { DeliveryTab } from './tabs/deliveryTab.page';
+import { CommentsTab } from './tabs/commentsTab.page';
 import { logStep } from 'utils/reporter.utils';
 import { OrderDetailsTab } from 'types/orderDetailsTabs.types';
 
@@ -9,6 +10,7 @@ export class OrderDetailsPage extends SalesPortalPage {
   readonly navigationItem = (name: OrderDetailsTab) =>
     this.orderDetailsNavigation.locator('button.nav-link', { hasText: name });
   readonly deliveryTab = new DeliveryTab(this.page);
+  readonly commentsTab = new CommentsTab(this.page);
 
   uniqueElement = this.title;
 
