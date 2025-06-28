@@ -6,6 +6,7 @@ import { orderSchemaResponse } from 'data/schemas/orders/order.schema';
 import { faker } from '@faker-js/faker';
 import { ERRORS } from 'data/errorMessages';
 import { baseSchema } from 'data/schemas/base.schema';
+import { ORDER_STATUSES } from 'data/orders/orders.data';
 
 async function createOrderData(
   customerService: any,
@@ -43,7 +44,7 @@ test.describe('[API], [Orders] GET /api/orders/{id}', () => {
     }
   });
 
-  test('Should get correct response, with the valid productId in query ', async ({
+  test('Should get order by order id', async ({
     customerService,
     productService,
     orderController,
@@ -54,14 +55,12 @@ test.describe('[API], [Orders] GET /api/orders/{id}', () => {
     const responseGetById = await orderController.getByIdOrder(orderId, token);
 
     expect.soft(responseGetById.status).toBe(STATUS_CODES.OK);
-    expect.soft(responseGetById.body.Order.status).toBe('Draft');
+    expect.soft(responseGetById.body.Order.status).toBe(ORDER_STATUSES.DRAFT);
     expect.soft(responseGetById.body.Order).toMatchObject({ ...responseCreate.body.Order });
     validateSchema(orderSchemaResponse, responseGetById.body);
   });
 
-  test('Should get Not Found in response, with the invalid productId in query ', async ({
-    orderController,
-  }) => {
+  test('Should 404 status in response, with the invalid productId', async ({ orderController }) => {
     const invalidId = `${faker.database.mongodbObjectId()}`;
     const response = await orderController.getByIdOrder(invalidId, token);
 
@@ -70,7 +69,7 @@ test.describe('[API], [Orders] GET /api/orders/{id}', () => {
     validateSchema(baseSchema, response.body);
   });
 
-  test('Should 401 , with empty token', async ({ orderController }) => {
+  test('Should not authozrized , with empty token', async ({ orderController }) => {
     const emptyToken = '';
     const response = await orderController.getByIdOrder(
       `${faker.database.mongodbObjectId()}`,
@@ -82,7 +81,7 @@ test.describe('[API], [Orders] GET /api/orders/{id}', () => {
     validateSchema(baseSchema, response.body);
   });
 
-  test('Should 401 , with invalid token', async ({ orderController }) => {
+  test('Should unauthorized , with invalid token', async ({ orderController }) => {
     const invalidToken = `${faker.internet.jwt({ header: { alg: 'HS256' } })}`;
     const response = await orderController.getByIdOrder(
       `${faker.database.mongodbObjectId()}`,

@@ -6,6 +6,7 @@ import { orderSchemaResponse } from 'data/schemas/orders/order.schema';
 import { faker } from '@faker-js/faker';
 import { ERRORS } from 'data/errorMessages';
 import { baseSchema } from 'data/schemas/base.schema';
+import { ORDER_STATUSES } from 'data/orders/orders.data';
 
 async function createOrderData(
   customerService: any,
@@ -70,7 +71,7 @@ test.describe('[API], [Orders] PUT /api/orders/{id}', () => {
     }
 
     expect.soft(updateResponse.status).toBe(STATUS_CODES.OK);
-    expect.soft(updateResponse.body.Order.status).toBe('Draft');
+    expect.soft(updateResponse.body.Order.status).toBe(ORDER_STATUSES.DRAFT);
     expect.soft(updateResponse.body.Order.customer._id).toBe(cutomerId);
     expect
       .soft(updateResponse.body.Order.customer._id)
@@ -108,7 +109,7 @@ test.describe('[API], [Orders] PUT /api/orders/{id}', () => {
     }
 
     expect.soft(updateResponse.status).toBe(STATUS_CODES.OK);
-    expect.soft(updateResponse.body.Order.status).toBe('Draft');
+    expect.soft(updateResponse.body.Order.status).toBe(ORDER_STATUSES.DRAFT);
     expect.soft(updateResponse.body.Order.customer._id).toBe(cutomerId);
     expect
       .soft(updateResponse.body.Order.customer._id)

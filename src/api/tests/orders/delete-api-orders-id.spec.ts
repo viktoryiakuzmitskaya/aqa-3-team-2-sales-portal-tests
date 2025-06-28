@@ -9,7 +9,7 @@ import { baseSchema } from 'data/schemas/base.schema';
 async function createOrderData(
   customerService: any,
   productService: any,
-  token?: any,
+  token?: string,
   numberOFProducts: number = 1,
 ) {
   if (typeof numberOFProducts !== 'number') {
@@ -51,7 +51,7 @@ test.describe('[API], [Orders] DELETE /api/orders/{id}', () => {
     }
   });
 
-  test('Should delete correct order', async ({
+  test('Should delete order by id', async ({
     customerService,
     productService,
     orderController,
@@ -68,8 +68,10 @@ test.describe('[API], [Orders] DELETE /api/orders/{id}', () => {
     expect(deleteOrder.body).toEqual('');
   });
 
-  test('Should 404 with invalid order', async ({ orderController }) => {
-    const orderId = `${faker.database.mongodbObjectId()}`;
+  test('Should get an error when deleting order by non-existent id', async ({
+    orderController,
+  }) => {
+    const orderId = faker.database.mongodbObjectId();
 
     const deleteOrder: any = await orderController.deleteOrder(orderId, token);
     expect(deleteOrder.status).toBe(STATUS_CODES.NOT_FOUND);

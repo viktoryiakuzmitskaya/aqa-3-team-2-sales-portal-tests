@@ -3,6 +3,7 @@ import { STATUS_CODES } from 'data/status.code';
 import { ICreateOrdersData } from 'types/orders.type';
 import { validateSchema } from 'utils/notifications/validations/schemaValidation';
 import { orderSchemaResponse } from 'data/schemas/orders/order.schema';
+import { ORDER_STATUSES } from 'data/orders/orders.data';
 
 async function createOrderData(
   customerService: any,
@@ -56,7 +57,7 @@ test.describe('[API] [Orders] POST /api/orders', () => {
     }
 
     expect.soft(response.status).toBe(STATUS_CODES.CREATED);
-    expect.soft(response.body.Order.status).toBe('Draft');
+    expect.soft(response.body.Order.status).toBe(ORDER_STATUSES.DRAFT);
     expect.soft(data.products).toEqual(productDataIds);
     expect.soft(data.customer).toBe(response.body.Order.customer._id);
     validateSchema(orderSchemaResponse, response.body);
@@ -75,7 +76,7 @@ test.describe('[API] [Orders] POST /api/orders', () => {
     orders.push(response.body.Order._id);
 
     expect.soft(response.status).toBe(STATUS_CODES.CREATED);
-    expect.soft(response.body.Order.status).toBe('Draft');
+    expect.soft(response.body.Order.status).toBe(ORDER_STATUSES.DRAFT);
     const productDataIds: string[] = [];
     for (const productId of response.body.Order.products) {
       productDataIds.push(productId._id);
