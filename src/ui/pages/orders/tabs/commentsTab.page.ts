@@ -61,7 +61,7 @@ export class CommentsTab extends Tab {
 
   @logStep('Check if comment exists')
   async hasComment(expected: ICommentFromResponse): Promise<boolean> {
-    const count = await this.commentBlocks.count();
+    const count = await this.getCommentsCount();
     for (let i = 0; i < count; i++) {
       const block = this.commentBlocks.nth(i);
       const data = await this.getCommentData(block);
