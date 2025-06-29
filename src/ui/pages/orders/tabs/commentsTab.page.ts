@@ -54,8 +54,8 @@ export class CommentsTab extends Tab {
     };
   }
 
-  @logStep('Delete comment')
-  async deleteComment(commentBlock: Locator): Promise<void> {
+  @logStep('Click delete button')
+  async clickDeleteButton(commentBlock: Locator): Promise<void> {
     await this.deleteButton(commentBlock).click();
   }
 
