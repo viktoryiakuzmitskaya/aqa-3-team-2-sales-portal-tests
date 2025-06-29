@@ -37,7 +37,7 @@ export interface IComment {
   comment: string;
 }
 
-export interface ICommentFromResponse extends IComment {
+export interface ICommentFromResponse {
   _id: string;
   text: string;
   createdOn: string;
