@@ -58,6 +58,18 @@ export class NotificationsModalPage extends Modal {
     return this.notificationTexts.nth(index).innerText();
   }
 
+  @logStep('Find notification index by text')
+  async findNotificationIndexByText(searchText: string): Promise<number | null> {
+    const count = await this.getNotificationCount();
+    for (let i = 0; i < count; i++) {
+      const text = await this.getNotificationText(i);
+      if (text.includes(searchText)) {
+        return i;
+      }
+    }
+    return null;
+  }
+
   @logStep('Get notification date by index')
   async getNotificationDate(index: number): Promise<string> {
     await this.ensureNotificationExists(index);
