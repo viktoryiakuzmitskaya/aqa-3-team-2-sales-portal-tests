@@ -30,3 +30,10 @@ export enum ROLES {
   ADMIN = 'ADMIN',
   USER = 'USER',
 }
+
+export enum OrderBarOption {
+  Status = 1,
+  TotalPrice = 2,
+  DeliveryDate = 3,
+  CreatedOn = 4,
+}

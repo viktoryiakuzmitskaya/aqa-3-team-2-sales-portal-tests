@@ -1,6 +1,7 @@
 import { expect } from '@playwright/test';
 import { Modal } from '../modal.page';
 import { logStep } from 'utils/reporter.utils';
+import { OrderBarOption } from 'data/orders/orders.data';
 
 export class OrderDetailsHeader extends Modal {
   readonly headerContainer = this.page.locator('#title');
@@ -17,17 +18,18 @@ export class OrderDetailsHeader extends Modal {
   readonly cancelOrderButton = this.uniqueElement.locator('#cancel-order');
   readonly reopenOrderButton = this.uniqueElement.locator('reopen-order');
   readonly refreshOrderButton = this.uniqueElement.locator('#refresh-order');
+  private readonly orderBarSelector = '#order-status-bar-container';
   readonly orderStatus = this.uniqueElement.locator(
-    '#order-status-bar-container>:nth-child(1)>.text-primary',
+    `${this.orderBarSelector}>:nth-child(${OrderBarOption.Status}) >.text-primary`,
   );
   readonly totalPrice = this.uniqueElement.locator(
-    '#order-status-bar-container>:nth-child(2)>.text-primary',
+    `${this.orderBarSelector}>:nth-child(${OrderBarOption.TotalPrice}) >.text-primary`,
   );
   readonly deliveryDate = this.uniqueElement.locator(
-    '#order-status-bar-container>:nth-child(3)>.text-primary',
+    `${this.orderBarSelector}>:nth-child(${OrderBarOption.DeliveryDate}) >.text-primary`,
   );
   readonly createdOn = this.uniqueElement.locator(
-    '#order-status-bar-container>:nth-child(4)>.text-primary',
+    `${this.orderBarSelector}>:nth-child(${OrderBarOption.CreatedOn}) >.text-primary`,
   );
 
   @logStep('Get Title Order Details')
