@@ -15,7 +15,7 @@ export class AssignManagerModal extends Modal {
   readonly managerInList = this.uniqueElement.locator('#manager-list li');
   readonly managerByUserName = (username: string) =>
     this.managerInList.filter({ has: this.page.getByText(`(${username})`) });
-  readonly searchManagerInput = this.uniqueElement.locator('manager-search-input');
+  readonly searchManagerInput = this.uniqueElement.locator('#manager-search-input');
 
   @logStep('Click Cancel button in Assign Manager modal')
   async clickCancelButton() {
