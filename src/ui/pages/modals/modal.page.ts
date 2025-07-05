@@ -5,7 +5,7 @@ import { logStep } from 'utils/reporter.utils';
 export abstract class Modal extends SalesPortalPage {
   readonly cancelButton: Locator = this.page.locator('btn btn-secondary');
   readonly closeButton: Locator = this.page.locator('.modal-header .btn-close');
-  
+
   async waitForClosed() {
     await expect(this.uniqueElement).not.toBeVisible();
   }
@@ -19,5 +19,4 @@ export abstract class Modal extends SalesPortalPage {
   async clickCancelButton() {
     await this.cancelButton.click();
   }
-
 }
