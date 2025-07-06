@@ -2,7 +2,7 @@ import { Locator } from '@playwright/test';
 import { SalesPortalPage } from '../salesPortal.page';
 import { OrdersFiltersModal } from '../modals/orders/filters.modal';
 import { CreateOrderModal } from '../modals/orders/createOrder.modal';
-import { ReopenOrderModal } from '../modals/orders/reopenOrder.modal';
+import { ConfirmationModal } from '../modals/confirmationModal.page';
 import { logStep } from 'utils/reporter.utils';
 
 export class OrdersListPage extends SalesPortalPage {
@@ -61,7 +61,7 @@ export class OrdersListPage extends SalesPortalPage {
   // Modals
   readonly filtersModal = new OrdersFiltersModal(this.page);
   readonly createOrderModal = new CreateOrderModal(this.page);
-  readonly reopenOrderModal = new ReopenOrderModal(this.page);
+  readonly reopenOrderModal = new ConfirmationModal(this.page);
 
   uniqueElement = this.pageTitle;
 
@@ -105,7 +105,7 @@ export class OrdersListPage extends SalesPortalPage {
   @logStep('Open reopen order modal for Order Number: {orderNumber}')
   async openReopenOrderModal(orderNumber: string) {
     await this.clickReopenOrder(orderNumber);
-    await this.reopenOrderModal.waitForOpened();
+    await this.reopenOrderModal.uniqueElement.waitFor({ state: 'visible' });
     return this.reopenOrderModal;
   }
 
