@@ -10,7 +10,7 @@ interface ISalesPortalPages {
   signInPage: SignInPage;
   assignManagerModal: AssignManagerModal;
   confirmationModal: ConfirmationModal;
-  oredrDetalsHeader: OrderDetailsHeader;
+  orderDetalsHeader: OrderDetailsHeader;
 }
 
 export const test = base.extend<ISalesPortalPages>({
@@ -30,7 +30,7 @@ export const test = base.extend<ISalesPortalPages>({
     await use(new ConfirmationModal(page));
   },
 
-  oredrDetalsHeader: async ({ page }, use) => {
+  orderDetalsHeader: async ({ page }, use) => {
     await use(new OrderDetailsHeader(page));
   },
 });

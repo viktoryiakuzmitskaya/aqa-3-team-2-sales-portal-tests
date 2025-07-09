@@ -10,7 +10,14 @@ export class RequestedProductsPage extends SalesPortalPage {
   readonly receivButton = this.page.locator('#start-receiving-products');
   readonly cancelButton = this.page.locator('#cancel-receiving');
   readonly saveButton = this.page.locator('#save-received-products');
-
+  readonly getProductName = (value: 0 | 1 | 2 | 3 | 4) =>
+    this.page.locator(`#products-accordion-section #heading${value} .accordion-button`).innerText(); //value it's position of product
+  readonly getProductStatus = (value: 0 | 1 | 2 | 3 | 4) =>
+    this.page
+      .locator(`#products-accordion-section #heading${value} .align-items-center`)
+      .innerText(); //value it's position of product
+  readonly checkByPosition = (position: 0 | 1 | 2 | 3 | 4) =>
+    this.page.locator(`#heading${position} #check${position}`);
   async clickOnEditProducts() {
     await this.editProductsPencil.click();
   }

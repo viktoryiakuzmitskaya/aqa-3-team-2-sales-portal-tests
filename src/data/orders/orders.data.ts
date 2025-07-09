@@ -3,6 +3,7 @@ export enum ORDER_STATUSES {
   IN_PROCESS = 'In Process',
   PARTIALLY_RECEIVED = 'Partially Received',
   RECEIVED = 'Received',
+  NOT_RECEIVED = 'Not Received',
   CANCELED = 'Canceled',
 }
 
