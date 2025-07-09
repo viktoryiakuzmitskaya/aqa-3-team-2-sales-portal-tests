@@ -3,6 +3,7 @@ import { HomePage } from 'ui/pages/home.page';
 import { AssignManagerModal } from 'ui/pages/modals/assignManager.page';
 import { ConfirmationModal } from 'ui/pages/modals/confirmationModal.page';
 import { OrderDetailsHeader } from 'ui/pages/modals/orders/orderDetails.header';
+import { OrdersListPage } from 'ui/pages/orders/ordersList.page';
 import { SignInPage } from 'ui/pages/signIn.page';
 
 interface ISalesPortalPages {
@@ -11,6 +12,7 @@ interface ISalesPortalPages {
   assignManagerModal: AssignManagerModal;
   confirmationModal: ConfirmationModal;
   oredrDetalsHeader: OrderDetailsHeader;
+  ordersListPage: OrdersListPage;
 }
 
 export const test = base.extend<ISalesPortalPages>({
@@ -32,6 +34,10 @@ export const test = base.extend<ISalesPortalPages>({
 
   oredrDetalsHeader: async ({ page }, use) => {
     await use(new OrderDetailsHeader(page));
+  },
+
+  ordersListPage: async ({ page }, use) => {
+    await use(new OrdersListPage(page));
   },
 });
 

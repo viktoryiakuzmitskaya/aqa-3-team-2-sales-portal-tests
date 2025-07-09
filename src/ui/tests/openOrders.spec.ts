@@ -21,7 +21,7 @@ class OrdersPage extends SalesPortalPage {
   }
 }
 
-test.describe('Проверка навигации по страницам ордеров', () => {
+test.describe('Checking the opening of the Orders page', () => {
   let signInPage: SignInPage;
   let homePage: HomePage;
   let headerPage: HeaderPage;
@@ -41,7 +41,7 @@ test.describe('Проверка навигации по страницам ор�
 
   test(
     'Checking the opening of the Orders page by URL',
-    { tag: [TAGS.SMOKE, TAGS.UI, TAGS.REGRESSION, TAGS.ORDER] },
+    { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.ORDER] },
     async ({ page }) => {
       await ordersPage.open();
       await ordersPage.waitForOpened();
@@ -53,7 +53,7 @@ test.describe('Проверка навигации по страницам ор�
 
   test(
     'Checking if the Orders page can be accessed through the navigation menu',
-    { tag: [TAGS.SMOKE, TAGS.UI, TAGS.REGRESSION, TAGS.ORDER] },
+    { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.ORDER] },
     async () => {
       await headerPage.clickModule('Orders');
       await ordersPage.waitForOpened();

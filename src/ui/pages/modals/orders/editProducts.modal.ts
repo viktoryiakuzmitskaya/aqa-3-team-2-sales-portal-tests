@@ -1,3 +1,4 @@
+import { logStep } from 'utils/reporter.utils';
 import { Modal } from '../modal.page';
 
 export class EditOrderProductsModal extends Modal {
@@ -26,22 +27,22 @@ export class EditOrderProductsModal extends Modal {
   async deleteOrderProductByName(productName: string): Promise<void> {
     const lastContainer = this.orderProductContainer.filter({ hasText: productName }).last();
 
-    await lastContainer.waitFor(); // Добавляем ожидание
+    await lastContainer.waitFor();
     await lastContainer.locator(this.deleteButton).click();
   }
-
+  @logStep('Click on save button')
   async clickOnSaveButton() {
     await this.saveButton.click();
   }
-
+  @logStep('Click on add new product button')
   async clickOnAddNewProductButton() {
     await this.addProductButton.click();
   }
-
+  @logStep('Click on cancel button')
   async clickOnCancelButton() {
     await this.cancelButton.click();
   }
-
+  @logStep('Click on close button')
   async clickOnCloseButton() {
     await this.closeButton.click();
   }

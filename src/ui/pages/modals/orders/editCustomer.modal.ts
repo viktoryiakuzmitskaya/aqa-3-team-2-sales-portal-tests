@@ -1,3 +1,4 @@
+import { logStep } from 'utils/reporter.utils';
 import { Modal } from '../modal.page';
 
 export class EditOrderCustomerModal extends Modal {
@@ -14,15 +15,15 @@ export class EditOrderCustomerModal extends Modal {
     const dropdowns = this.inputCustomer;
     await dropdowns.selectOption({ value: newCustomerName });
   }
-
+  @logStep('Click on save button')
   async clickOnSaveButton() {
     await this.saveButton.click();
   }
-
+  @logStep('Click on cancel button')
   async clickOnCancelButton() {
     await this.cancelButton.click();
   }
-
+  @logStep('Click on close button')
   async clickOnCloseButton() {
     await this.closeButton.click();
   }

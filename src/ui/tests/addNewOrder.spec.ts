@@ -1,6 +1,6 @@
-/*import { NOTIFICATIONS } from 'data/notifications.data';
+import { NOTIFICATIONS } from 'data/notifications.data';
 import { TAGS } from 'data/tags';
-import { expect, test } from 'ui/fixtures/ui-services.fixture';
+import { test } from 'fixtures/index';
 
 test.describe('[UI] [Orders] Orders Smoke tests', async function () {
   let customerId = '';
@@ -8,74 +8,67 @@ test.describe('[UI] [Orders] Orders Smoke tests', async function () {
   let productId = '';
   let productName = '';
   let orderId = '';
+  let token = '';
 
   test.beforeEach(async ({ signInUIService, homeUIService, customerService, productService }) => {
-    const createdCustomer = await customerService.create();
+    // Создание клиента
+    token = await signInUIService.signInAsLocalUser();
+    const createdCustomer = await customerService.create(token);
     customerId = createdCustomer._id;
     customerName = createdCustomer.name;
 
-    const createdProduct = await productService.create();
+    // Создание продукта
+    const createdProduct = await productService.create(token);
     productId = createdProduct._id;
     productName = createdProduct.name;
 
-    await signInUIService.openSalesPortal();
     await homeUIService.openOrdersPage();
   });
 
-  test.afterEach(async ({ customerService, ordersService, productService }) => {
-    orderId && (await ordersService.delete(orderId));
-    customerId && (await customerService.delete(customerId));
-    productId && (await productService.delete(productId));
+  // Очистка после каждого теста
+  test.afterEach(async ({ customerService, orderService, productService }) => {
+    // Удаление заказа, если он был создан
+    if (orderId) {
+      await orderService.delete(orderId, token);
+    }
+    // Удаление клиента
+    if (customerId) {
+      await customerService.delete(customerId, token);
+    }
+    // Удаление продукта
+    if (productId) {
+      await productService.delete(productId, token);
+    }
   });
 
   test(
     'Create Order Smoke test',
-    { tag: [TAGS.REGRESSION, TAGS.SMOKE] },
-    async function ({ ordersListPageService, page }) {
-      const order = {
-        customer: customerName,
-        products: [productName],
-      };
+    { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.SMOKE] },
+    async function ({ ordersUIService, ordersListPage }) {
+      // Шаг 1: Открытие модального окна создания заказа
+      //await ordersUIService.createNewOrder();
+      await ordersListPage.clickCreateOrder();
+      await ordersListPage.createOrderModal.waitForOpened();
 
-      // Step 1: Open create order modal
-      const createOrderModal = await ordersListPageService.openCreateOrderModal();
-      await createOrderModal.waitForOpened();
+      // Шаг 2: Заполнение формы заказа
+      await ordersListPage.createOrderModal.selectCustomer(customerName);
+      await ordersListPage.createOrderModal.selectProduct(productName);
 
-      // Step 2: Verify modal is properly displayed
-      await createOrderModal.verifyModalElementsVisible({
-        title: true,
-        customerSelect: true,
-        productsSection: true,
-        createButton: true,
-      });
+      // Шаг 3: Подтверждение создания заказа
+      await ordersListPage.createOrderModal.createOrder();
+      await ordersListPage.createOrderModal.waitForClosed();
 
-      // Step 3: Fill order form
-      await createOrderModal.fillOrderForm(order);
+      // Шаг 4: Проверка notification
+      await ordersListPage.notificationsModalPage.isVisible();
+      await ordersListPage.notificationsModalPage.verifyNotificationText(
+        NOTIFICATIONS.ORDER_CREATED,
+      );
+      // Шаг 5: Получение информации о созданном заказе
+      const orderInfo = await ordersUIService.getOrderInfo(0);
+      orderId = orderInfo.orderNumber;
 
-      // Step 4: Verify form is filled correctly
-      const selectedCustomer = await createOrderModal.customerSelect.textContent();
-      expect(selectedCustomer).toContain(customerName);
-
-      const selectedProduct = await createOrderModal.productSelects.first().textContent();
-      expect(selectedProduct).toContain(productName);
-
-      // Step 5: Create order
-      await createOrderModal.createOrder();
-      await createOrderModal.uniqueElement.waitFor({ state: 'hidden' });
-
-      // Step 6: Verify notification
-      await ordersListPageService.validateNotification(NOTIFICATIONS.ORDER_CREATED);
-
-      // Step 7: Get created order ID
-      orderId = await ordersListPageService.getOrderId(customerName);
-
-      // Step 8: Verify order appears in the table
-      await ordersListPageService.checkOrderInTable(order);
-
-      // Step 9: Verify order details by opening it
-      await ordersListPageService.navigateToOrderDetails(orderId);
-      await expect(page).toHaveURL(new RegExp(`.*#/orders/${orderId}$`));
-      await page.goBack();
+      // Шаг 6: Проверка отображения заказа в списке
+      await ordersUIService.verifyOrderInList(orderId);
     },
   );
-}); */
+});
