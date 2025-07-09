@@ -117,24 +117,24 @@ export abstract class DeliveryModal extends Modal {
   }
 
   @logStep('Fill all inputs in modal')
-  async fillDeliveryInputs(Data: DataInEditDeliveryModal) {
-    if (Data.day) {
-      await this.selectDate(Data.day, Data.month);
+  async fillDeliveryInputs(data: DataInEditDeliveryModal) {
+    if (data.day) {
+      await this.selectDate(data.day, data.month);
     }
     if (this.countryOption) {
-      await this.selectCountryOption(Data.country);
+      await this.selectCountryOption(data.country);
     }
     if (this.cityInput) {
-      await this.fillCity(Data.city);
+      await this.fillCity(data.city);
     }
     if (this.streetInput) {
-      await this.fillStreet(Data.street);
+      await this.fillStreet(data.street);
     }
     if (this.houseInput) {
-      await this.fillHouse(Data.house.toString());
+      await this.fillHouse(data.house.toString());
     }
     if (this.flatInput) {
-      await this.fillFlat(Data.flat.toString());
+      await this.fillFlat(data.flat.toString());
     }
   }
 }

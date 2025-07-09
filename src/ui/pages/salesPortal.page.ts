@@ -15,7 +15,7 @@ export abstract class SalesPortalPage extends BasePage {
   }
 
   async waitForSpinner() {
-    await expect(this.spinner).toHaveCount(0);
+    await expect(this.spinner).toHaveCount(0, { timeout: 10000 });
   }
 
   async waitForNotification(text: string) {
