@@ -8,6 +8,7 @@ export class HomePage extends SalesPortalPage {
   customersButton = this.page.getByRole('link', { name: 'Customer' });
   productsButton = this.page.getByRole('link', { name: 'Products' });
   ordersButton = this.page.locator('#orders-from-home');
+  // ordersButton = this.page.getByRole('link', { name: 'Orders', exact: true });
 
   uniqueElement = this.title;
 

@@ -61,6 +61,7 @@ export class OrdersListPage extends SalesPortalPage {
   readonly reopenButtons = this.page.locator('button.btn.table-btn[title="Reopen"]');
   //NotificationsModalPage
   readonly notificationsModalPage = new NotificationsModalPage(this.page);
+
   // Modals
   readonly filtersModal = new OrdersFiltersModal(this.page);
   readonly createOrderModal = new CreateOrderModal(this.page);

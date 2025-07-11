@@ -16,12 +16,13 @@ export class OrderDetailsHeader extends Modal {
     .locator('#assigned-manager-container')
     .getByTitle('Remove Assigned Manager');
   readonly cancelOrderButton = this.uniqueElement.locator('#cancel-order');
-  readonly reopenOrderButton = this.uniqueElement.locator('reopen-order');
+  readonly reopenOrderButton = this.uniqueElement.locator('#reopen-order');
   readonly refreshOrderButton = this.uniqueElement.locator('#refresh-order');
+  readonly orderStatusBarContainer = this.page.locator('#order-status-bar-container');
   private readonly orderBarSelector = '#order-status-bar-container';
-  readonly orderStatus = this.uniqueElement.locator(
-    `${this.orderBarSelector}>:nth-child(${OrderBarOption.Status}) >.text-primary`,
-  );
+  readonly orderStatus = this.orderStatusBarContainer
+    .locator('div:has(span.fw-bold:has-text("Order Status")) > span')
+    .nth(1);
   readonly totalPrice = this.uniqueElement.locator(
     `${this.orderBarSelector}>:nth-child(${OrderBarOption.TotalPrice}) >.text-primary`,
   );
