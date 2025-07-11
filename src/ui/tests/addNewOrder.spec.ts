@@ -2,7 +2,7 @@ import { NOTIFICATIONS } from 'data/notifications.data';
 import { TAGS } from 'data/tags';
 import { test } from 'fixtures/index';
 
-test.describe('[UI] [Orders] Orders Smoke tests', async function () {
+test.describe('[UI] [Orders] Create Order. Smoke tests', async function () {
   let customerId = '';
   let customerName = '';
   let productId = '';
@@ -44,7 +44,7 @@ test.describe('[UI] [Orders] Orders Smoke tests', async function () {
   test(
     'Create Order Smoke test',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.SMOKE] },
-    async function ({ ordersUIService, ordersListPage }) {
+    async function ({ ordersUIService, ordersListPage, page }) {
       // Шаг 1: Открытие модального окна создания заказа
       //await ordersUIService.createNewOrder();
       await ordersListPage.clickCreateOrder();
@@ -54,18 +54,27 @@ test.describe('[UI] [Orders] Orders Smoke tests', async function () {
       await ordersListPage.createOrderModal.selectCustomer(customerName);
       await ordersListPage.createOrderModal.selectProduct(productName);
 
+      const responsePromise = page.waitForResponse(
+        (response) =>
+          response.url().includes('/api/orders') &&
+          response.request().method() === 'POST' &&
+          response.status() === 201,
+      );
+
       // Шаг 3: Подтверждение создания заказа
       await ordersListPage.createOrderModal.createOrder();
       await ordersListPage.createOrderModal.waitForClosed();
 
       // Шаг 4: Проверка notification
-      await ordersListPage.notificationsModalPage.isVisible();
-      await ordersListPage.notificationsModalPage.verifyNotificationText(
-        NOTIFICATIONS.ORDER_CREATED,
-      );
+      await ordersListPage.toastBody.isVisible();
+      await ordersListPage.checkNotification(NOTIFICATIONS.ORDER_CREATED);
+
       // Шаг 5: Получение информации о созданном заказе
-      const orderInfo = await ordersUIService.getOrderInfo(0);
-      orderId = orderInfo.orderNumber;
+      /*const orderInfo = await ordersUIService.getOrderInfo(0);
+      orderId = orderInfo.orderNumber;*/
+      const response = await responsePromise;
+      const responseBody = await response.json();
+      orderId = responseBody.Order._id;
 
       // Шаг 6: Проверка отображения заказа в списке
       await ordersUIService.verifyOrderInList(orderId);

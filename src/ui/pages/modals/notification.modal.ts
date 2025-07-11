@@ -119,25 +119,4 @@ export class NotificationsModalPage extends Modal {
       throw new Error(`No notification found at index ${index}. Total available: ${count}`);
     }
   }
-  @logStep('Verify notification contains text')
-  async verifyNotificationText(
-    expectedText: string,
-    options: { exactMatch?: boolean; index?: number } = {},
-  ): Promise<boolean> {
-    const { exactMatch = false, index } = options;
-
-    if (index !== undefined) {
-      await this.ensureNotificationExists(index);
-      const actualText = await this.getNotificationText(index);
-      return exactMatch ? actualText === expectedText : actualText.includes(expectedText);
-    }
-    const count = await this.getNotificationCount();
-    for (let i = 0; i < count; i++) {
-      const text = await this.getNotificationText(i);
-      if (exactMatch ? text === expectedText : text.includes(expectedText)) {
-        return true;
-      }
-    }
-    return false;
-  }
 }

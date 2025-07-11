@@ -1,4 +1,5 @@
 import { test as base } from '@playwright/test';
+import { HeaderPage } from 'ui/pages/header.page';
 import { HomePage } from 'ui/pages/home.page';
 import { AssignManagerModal } from 'ui/pages/modals/assignManager.page';
 import { ConfirmationModal } from 'ui/pages/modals/confirmationModal.page';
@@ -13,6 +14,7 @@ interface ISalesPortalPages {
   confirmationModal: ConfirmationModal;
   oredrDetalsHeader: OrderDetailsHeader;
   ordersListPage: OrdersListPage;
+  headerPage: HeaderPage;
 }
 
 export const test = base.extend<ISalesPortalPages>({
@@ -38,6 +40,10 @@ export const test = base.extend<ISalesPortalPages>({
 
   ordersListPage: async ({ page }, use) => {
     await use(new OrdersListPage(page));
+  },
+
+  headerPage: async ({ page }, use) => {
+    await use(new HeaderPage(page));
   },
 });
 
