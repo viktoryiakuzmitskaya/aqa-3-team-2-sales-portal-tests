@@ -4,6 +4,7 @@ import { OrdersFiltersModal } from '../modals/orders/filters.modal';
 import { CreateOrderModal } from '../modals/orders/createOrder.modal';
 import { ConfirmationModal } from '../modals/confirmationModal.page';
 import { logStep } from 'utils/reporter.utils';
+import { NotificationsModalPage } from '../modals/notification.modal';
 
 export class OrdersListPage extends SalesPortalPage {
   // Main page elements
@@ -57,6 +58,9 @@ export class OrdersListPage extends SalesPortalPage {
   // Row action buttons
   readonly detailsButtons = this.page.locator('a.btn.table-btn[title="Details"]');
   readonly reopenButtons = this.page.locator('button.btn.table-btn[title="Reopen"]');
+
+  //NotificationsModalPage
+  readonly notificationsModalPage = new NotificationsModalPage(this.page);
 
   // Modals
   readonly filtersModal = new OrdersFiltersModal(this.page);
