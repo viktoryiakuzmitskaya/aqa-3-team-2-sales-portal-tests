@@ -75,12 +75,12 @@ test.describe('[API] Delete order comment', () => {
       },
     );
 
-    invalidTestCasesWithoutToken.forEach(({ name, invalidToken, expectedMessage }) => {
+    invalidTestCasesWithoutToken.forEach(({ name, token, expectedMessage }) => {
       test(
         `Should return 401 error when ${name}`,
         { tag: [TAGS.API, TAGS.ORDER, TAGS.SMOKE, TAGS.REGRESSION] },
         async ({ orderController }) => {
-          const response = await orderController.deleteComment(orderId, commentId, invalidToken);
+          const response = await orderController.deleteComment(orderId, commentId, token);
           validateSchema(baseSchema, response.body);
           validateResponse(response, STATUS_CODES.UNAUTHORIZED, false, expectedMessage);
         },
