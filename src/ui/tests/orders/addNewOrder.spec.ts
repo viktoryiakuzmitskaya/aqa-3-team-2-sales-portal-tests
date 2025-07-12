@@ -1,6 +1,6 @@
 import { NOTIFICATIONS } from 'data/notifications.data';
 import { TAGS } from 'data/tags';
-import { test } from 'ui/fixtures/index';
+import { test } from '../../../fixtures/index';
 
 test.describe('[UI] [Orders] Create Order. Smoke tests', async function () {
   let customerId = '';

@@ -1,5 +1,5 @@
 import { TAGS } from 'data/tags';
-import { expect, test } from 'ui/fixtures/index';
+import { expect, test } from '../../../fixtures/index';
 
 test.describe('[UI] [Orders] Assign Manager Tests', () => {
   let customerId = '';

@@ -1,5 +1,5 @@
 import { TAGS } from 'data/tags';
-import { test, expect } from 'ui/fixtures/index';
+import { test, expect } from '../../../fixtures/index';
 
 test.describe('[UI] [Managers] Managers List Page', async function () {
   test.beforeEach(async ({ signInUIService, managersUIService }) => {
