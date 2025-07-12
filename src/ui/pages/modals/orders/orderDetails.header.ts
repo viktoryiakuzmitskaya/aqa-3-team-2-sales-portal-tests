@@ -8,7 +8,7 @@ export class OrderDetailsHeader extends Modal {
   uniqueElement = this.headerContainer;
   readonly title = this.uniqueElement.locator('.page-header-flex .ml-20');
   readonly orderNumber = this.uniqueElement.locator('.d-flex.justify-content-start > .fst-italic');
-  readonly assignedManager = this.uniqueElement.locator('#assigned-manager-link');
+  readonly assignedManager = this.uniqueElement.locator('u[onclick*="renderAssigneManagerModal"]');
   readonly editAssignedButton = this.uniqueElement
     .locator('#assigned-manager-container')
     .getByTitle('Edit Assigned Manager');
@@ -45,6 +45,12 @@ export class OrderDetailsHeader extends Modal {
 
   @logStep('Get Assigned Manager name from Order Details header')
   async getAssignedManagerName() {
+    // Check if there's an assigned manager link
+    const assignedManagerLink = this.uniqueElement.locator('#assigned-manager-link');
+    if (await assignedManagerLink.isVisible()) {
+      return await assignedManagerLink.innerText();
+    }
+    // If no manager is assigned, return the text from the "Click to select manager" element
     return await this.assignedManager.innerText();
   }
 
@@ -68,7 +74,7 @@ export class OrderDetailsHeader extends Modal {
     return await this.createdOn.innerText();
   }
 
-  @logStep('Click Edit Assigned Manager name in Order Details header')
+  @logStep('Click Assign Manager button in Order Details header')
   async clickEditAssigned() {
     expect.soft(this.assignedManager).toBeVisible();
     expect.soft(this.assignedManager).toBeEnabled();

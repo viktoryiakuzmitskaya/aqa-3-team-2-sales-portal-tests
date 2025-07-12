@@ -1,1 +1,1 @@
-export type ModuleName = 'Customers' | 'Products' | 'Orders';
+export type ModuleName = 'Customers' | 'Products' | 'Orders' | 'Managers';

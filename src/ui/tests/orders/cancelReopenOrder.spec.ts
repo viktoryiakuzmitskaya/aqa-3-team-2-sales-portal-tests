@@ -1,7 +1,7 @@
 import { NOTIFICATIONS } from 'data/notifications.data';
 import { ORDER_STATUSES } from 'data/orders/orders.data';
 import { TAGS } from 'data/tags';
-import { test, expect } from 'fixtures';
+import { test, expect } from 'ui/fixtures/index';
 
 test.describe('[UI] [Orders] Cancel Order', () => {
   const testCases = [

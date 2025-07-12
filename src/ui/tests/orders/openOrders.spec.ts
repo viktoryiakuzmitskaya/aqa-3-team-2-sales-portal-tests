@@ -1,5 +1,5 @@
 import { ROUTES } from 'config/ui-config';
-import { expect, test } from 'fixtures/index';
+import { expect, test } from 'ui/fixtures/index';
 import { TAGS } from 'data/tags';
 
 test.describe('Checking the opening of the Orders page', () => {

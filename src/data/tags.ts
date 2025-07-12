@@ -7,4 +7,6 @@ export enum TAGS {
   PRODUCTS = '@Products',
   CUSTOMERS = '@Customers',
   ORDER = '@Order',
+  MANAGERS = '@Managers',
+  FUNCTIONAL = '@functional',
 }

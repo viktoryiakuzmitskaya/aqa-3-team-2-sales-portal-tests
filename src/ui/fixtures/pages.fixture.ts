@@ -7,6 +7,8 @@ import { ConfirmationModal } from 'ui/pages/modals/confirmationModal.page';
 import { OrderDetailsHeader } from 'ui/pages/modals/orders/orderDetails.header';
 import { OrderDetailsPage } from 'ui/pages/orders/orderDetailsPage.page';
 import { OrdersListPage } from 'ui/pages/orders/ordersList.page';
+import { ManagersListPage } from 'ui/pages/managers/managersList.page';
+import { CreateManagerPage } from 'ui/pages/managers/createManager.page';
 
 interface ISalesPortalPages {
   homePage: HomePage;
@@ -18,6 +20,8 @@ interface ISalesPortalPages {
   headerPage: HeaderPage;
   orderDetailsHeader: OrderDetailsHeader;
   orderDetailsPage: OrderDetailsPage;
+  managersListPage: ManagersListPage;
+  createManagerPage: CreateManagerPage;
 }
 
 export const test = base.extend<ISalesPortalPages>({
@@ -44,12 +48,21 @@ export const test = base.extend<ISalesPortalPages>({
   ordersListPage: async ({ page }, use) => {
     await use(new OrdersListPage(page));
   },
+
   orderDetailsPage: async ({ page }, use) => {
     await use(new OrderDetailsPage(page));
   },
 
   headerPage: async ({ page }, use) => {
     await use(new HeaderPage(page));
+  },
+
+  managersListPage: async ({ page }, use) => {
+    await use(new ManagersListPage(page));
+  },
+
+  createManagerPage: async ({ page }, use) => {
+    await use(new CreateManagerPage(page));
   },
 });
 
