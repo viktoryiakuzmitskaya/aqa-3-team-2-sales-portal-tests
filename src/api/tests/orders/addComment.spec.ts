@@ -64,7 +64,7 @@ test.describe('[API] [Orders] Add Comment', () => {
       );
     });
 
-    invalidTestCasesWithoutToken.forEach(({ name, invalidToken, expectedMessage }) => {
+    invalidTestCasesWithoutToken.forEach(({ name, token, expectedMessage }) => {
       test(
         `Should return 401 error when ${name}`,
         { tag: [TAGS.API, TAGS.ORDER, TAGS.SMOKE, TAGS.REGRESSION] },
@@ -73,7 +73,7 @@ test.describe('[API] [Orders] Add Comment', () => {
           const orderWithCommentResponse = await orderController.postComment(
             orderId,
             { comment: commentText },
-            invalidToken,
+            token,
           );
 
           validateSchema(baseSchema, orderWithCommentResponse.body);
