@@ -21,7 +21,7 @@ test.describe('[UI] [Orders] Cancel Order', () => {
         orderService,
         signInService,
         headerPage,
-        orderListPage,
+        ordersListPage,
         orderDetailsPage,
         confirmationModal,
         orderDetailsHeader,
@@ -36,7 +36,7 @@ test.describe('[UI] [Orders] Cancel Order', () => {
         });
 
         await test.step('Cancel the order via UI', async () => {
-          await orderListPage.clickOrderDetails(orderId);
+          await ordersListPage.clickOrderDetails(orderId);
           await orderDetailsPage.waitForOpened();
           await orderDetailsHeader.clickCancelOrder();
           await orderDetailsPage.waitForSpinner();
@@ -45,7 +45,7 @@ test.describe('[UI] [Orders] Cancel Order', () => {
         });
 
         await test.step('Check cancellation notification and order status', async () => {
-          await orderListPage.waitForNotification(NOTIFICATIONS.ORDER_CANCELED);
+          await ordersListPage.waitForNotification(NOTIFICATIONS.ORDER_CANCELED);
 
           const updatedStatus = await orderDetailsHeader.getOrderStatus();
           await expect(updatedStatus, 'Order status is incorrect').toBe(ORDER_STATUSES.CANCELED);
@@ -68,7 +68,7 @@ test.describe('[UI] [Orders] Reopen order', () => {
       orderService,
       signInService,
       headerPage,
-      orderListPage,
+      ordersListPage,
       orderDetailsPage,
       confirmationModal,
       orderDetailsHeader,
@@ -83,7 +83,7 @@ test.describe('[UI] [Orders] Reopen order', () => {
       });
 
       await test.step('Reopen the canceled order via UI', async () => {
-        await orderListPage.clickOrderDetails(orderId);
+        await ordersListPage.clickOrderDetails(orderId);
         await orderDetailsPage.waitForOpened();
         await orderDetailsHeader.clickReopenOrder();
         await orderDetailsPage.waitForSpinner();
@@ -92,7 +92,7 @@ test.describe('[UI] [Orders] Reopen order', () => {
       });
 
       await test.step('Check reopen notification and order status', async () => {
-        await orderListPage.waitForNotification(NOTIFICATIONS.ORDER_REOPENED);
+        await ordersListPage.waitForNotification(NOTIFICATIONS.ORDER_REOPENED);
 
         const updatedStatus = await orderDetailsHeader.getOrderStatus();
         await expect(updatedStatus, 'Order status is incorrect').toBe(ORDER_STATUSES.DRAFT);

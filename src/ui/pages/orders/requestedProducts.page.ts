@@ -10,6 +10,7 @@ export class RequestedProductsPage extends SalesPortalPage {
   readonly receivButton = this.page.locator('#start-receiving-products');
   readonly cancelButton = this.page.locator('#cancel-receiving');
   readonly saveButton = this.page.locator('#save-received-products');
+  readonly checkboxAll = this.page.locator('#selectAll');
 
   async clickOnEditProducts() {
     await this.editProductsPencil.click();
@@ -66,7 +67,6 @@ export class RequestedProductsPage extends SalesPortalPage {
     await this.saveButton.click();
   }
 
-  readonly checkboxAll = this.page.locator('#selectAll');
   async checkboxOnAll() {
     await this.checkboxAll.check();
   }
