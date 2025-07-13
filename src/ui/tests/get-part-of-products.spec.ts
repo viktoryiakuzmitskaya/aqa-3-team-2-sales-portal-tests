@@ -31,7 +31,7 @@ test.describe('Should receiving products in statuses in progress', () => {
     orderService,
     ordersUIService,
     homePage,
-    orderDetalsHeader,
+    orderDetailsHeader,
   }) => {
     const requestedProduct = new RequestedProductsPage(page);
 
@@ -49,8 +49,8 @@ test.describe('Should receiving products in statuses in progress', () => {
     await homePage.clickModuleButton('Orders');
     await ordersUIService.searchOrders(orderId);
     await ordersUIService.openOrderDetails(orderId);
-    await orderDetalsHeader.waitForOpened();
-    const status = await orderDetalsHeader.getOrderStatus();
+    await orderDetailsHeader.waitForOpened();
+    const status = await orderDetailsHeader.getOrderStatus();
     await requestedProduct.clickOnReceive();
     await requestedProduct.waitForSpinner();
     await requestedProduct.checkboxOnAll();
@@ -75,7 +75,7 @@ test.describe('Should receiving products in statuses in progress', () => {
     orderService,
     ordersUIService,
     homePage,
-    orderDetalsHeader,
+    orderDetailsHeader,
   }) => {
     const requestedProduct = new RequestedProductsPage(page);
 
@@ -94,7 +94,7 @@ test.describe('Should receiving products in statuses in progress', () => {
     await homePage.clickModuleButton('Orders');
     await ordersUIService.searchOrders(orderId);
     await ordersUIService.openOrderDetails(orderId);
-    await orderDetalsHeader.waitForOpened();
+    await orderDetailsHeader.waitForOpened();
     await requestedProduct.clickOnReceive();
     await requestedProduct.waitForSpinner();
     await requestedProduct.checkByPosition(0).check();
@@ -123,7 +123,7 @@ test.describe('Should receiving products in statuses in progress', () => {
     orderService,
     ordersUIService,
     homePage,
-    orderDetalsHeader,
+    orderDetailsHeader,
   }) => {
     const requestedProduct = new RequestedProductsPage(page);
 
@@ -135,7 +135,7 @@ test.describe('Should receiving products in statuses in progress', () => {
     await homePage.clickModuleButton('Orders');
     await ordersUIService.searchOrders(orderId);
     await ordersUIService.openOrderDetails(orderId);
-    await orderDetalsHeader.waitForOpened();
+    await orderDetailsHeader.waitForOpened();
     await requestedProduct.clickOnReceive();
     await requestedProduct.waitForSpinner();
     await requestedProduct.checkByPosition(0).check();
