@@ -32,6 +32,7 @@ export class OrderDetailsHeader extends Modal {
   readonly createdOn = this.uniqueElement.locator(
     `${this.orderBarSelector}>:nth-child(${OrderBarOption.CreatedOn}) >.text-primary`,
   );
+  readonly assignedManagerLink = this.uniqueElement.locator('#assigned-manager-link');
 
   @logStep('Get Title Order Details')
   async getTitle() {
@@ -45,12 +46,9 @@ export class OrderDetailsHeader extends Modal {
 
   @logStep('Get Assigned Manager name from Order Details header')
   async getAssignedManagerName() {
-    // Check if there's an assigned manager link
-    const assignedManagerLink = this.uniqueElement.locator('#assigned-manager-link');
-    if (await assignedManagerLink.isVisible()) {
-      return await assignedManagerLink.innerText();
+    if (await this.assignedManagerLink.isVisible()) {
+      return await this.assignedManagerLink.innerText();
     }
-    // If no manager is assigned, return the text from the "Click to select manager" element
     return await this.assignedManager.innerText();
   }
 

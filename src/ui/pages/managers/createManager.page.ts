@@ -1,20 +1,16 @@
 import { expect, Locator, Page } from '@playwright/test';
-import { BasePage } from '../base.page';
+import { SalesPortalPage } from '../salesPortal.page';
 import { ROUTES } from 'config/ui-config';
 import { logStep } from 'utils/reporter.utils';
+import { ICreateManagerData } from 'types/managers.types';
 
-export interface ICreateManagerData {
-  username: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-  confirmPassword: string;
-}
+export const CREATE_MANAGER_PAGE_TITLE = 'Add New Manager';
 
-export class CreateManagerPage extends BasePage {
+export class CreateManagerPage extends SalesPortalPage {
   // Уникальный элемент для ожидания загрузки страницы
   readonly pageTitle = this.page.locator('h2.page-title-text');
   readonly backLink = this.page.locator('a.back-link');
+  readonly uniqueElement = this.page.locator('h2.page-title-text');
 
   // Form elements (точно соответствуют реальной HTML)
   readonly form = this.page.locator('#add-new-manager-form');
@@ -42,16 +38,7 @@ export class CreateManagerPage extends BasePage {
   @logStep('Open Create Manager page')
   async open() {
     await this.page.goto(ROUTES.MANAGER_ADD);
-    await this.waitForPageLoad();
-  }
-
-  @logStep('Wait for page to load')
-  async waitForPageLoad() {
-    // Ждем появления заголовка страницы
-    await expect(this.pageTitle).toBeVisible();
-    await expect(this.pageTitle).toHaveText('Add New Manager');
-    // Ждем появления формы
-    await expect(this.form).toBeVisible();
+    await this.waitForOpened();
   }
 
   @logStep('Fill username field: {username}')
@@ -137,10 +124,9 @@ export class CreateManagerPage extends BasePage {
     }
   }
 
-  @logStep('Check field has validation error state: {fieldName}')
-  async checkFieldHasValidationError(fieldName: string) {
+  @logStep('Check field has invalid class: {fieldName}')
+  async checkFieldHasInvalidClass(fieldName: string) {
     const field = this.getFieldByName(fieldName);
-    // Проверяем только наличие is-invalid класса
     await expect(field).toHaveClass(/is-invalid/);
   }
 
@@ -222,6 +208,18 @@ export class CreateManagerPage extends BasePage {
   @logStep('Check save button is enabled')
   async checkSaveButtonEnabled() {
     await expect(this.saveButton).toBeEnabled();
+  }
+
+  @logStep('Check field error text: {fieldName}')
+  async checkFieldErrorText(fieldName: string, expectedMessage: string) {
+    const errorElement = this.getErrorElementByFieldName(fieldName);
+    await expect(errorElement).toHaveText(expectedMessage);
+  }
+
+  @logStep('Check field error is not visible: {fieldName}')
+  async checkFieldErrorNotVisible(fieldName: string) {
+    const errorElement = this.getErrorElementByFieldName(fieldName);
+    await expect(errorElement).not.toBeVisible();
   }
 
   // Helper methods
