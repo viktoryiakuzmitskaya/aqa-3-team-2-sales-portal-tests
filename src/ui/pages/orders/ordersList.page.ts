@@ -1,9 +1,10 @@
-import { Locator } from '@playwright/test';
+import { expect, Locator } from '@playwright/test';
 import { SalesPortalPage } from '../salesPortal.page';
 import { OrdersFiltersModal } from '../modals/orders/filters.modal';
 import { CreateOrderModal } from '../modals/orders/createOrder.modal';
 import { ConfirmationModal } from '../modals/confirmationModal.page';
 import { logStep } from 'utils/reporter.utils';
+import { NotificationsModalPage } from '../modals/notification.modal';
 
 export class OrdersListPage extends SalesPortalPage {
   // Main page elements
@@ -20,6 +21,7 @@ export class OrdersListPage extends SalesPortalPage {
   readonly ordersTable = this.page.locator('#table-orders');
   readonly tableHeaders = this.ordersTable.locator('thead th');
   readonly tableRows = this.ordersTable.locator('tbody tr');
+  readonly toastBody = this.ordersTable.locator('.toast-body');
 
   // Specific column headers for sorting
   readonly orderNumberHeader = this.page.locator(
@@ -57,6 +59,8 @@ export class OrdersListPage extends SalesPortalPage {
   // Row action buttons
   readonly detailsButtons = this.page.locator('a.btn.table-btn[title="Details"]');
   readonly reopenButtons = this.page.locator('button.btn.table-btn[title="Reopen"]');
+  //NotificationsModalPage
+  readonly notificationsModalPage = new NotificationsModalPage(this.page);
 
   // Modals
   readonly filtersModal = new OrdersFiltersModal(this.page);
@@ -256,5 +260,9 @@ export class OrdersListPage extends SalesPortalPage {
   async clearSearch() {
     await this.searchInput.clear();
     // Note: May need to trigger search after clearing depending on implementation
+  }
+  @logStep('Check Notification text')
+  async checkNotification(text: string) {
+    await expect(this.notification.last()).toHaveText(text);
   }
 }

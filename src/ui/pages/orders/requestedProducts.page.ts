@@ -20,6 +20,8 @@ export class RequestedProductsPage extends SalesPortalPage {
     this.productByIndex(value).locator(`.received-label`).innerText(); //value it's position of product
   readonly checkByPosition = (position: 0 | 1 | 2 | 3 | 4) =>
     this.productByIndex(position).locator(`#check${position}`);
+  readonly checkboxAll = this.page.locator('#selectAll');
+
   async clickOnEditProducts() {
     await this.editProductsPencil.click();
   }
@@ -75,7 +77,6 @@ export class RequestedProductsPage extends SalesPortalPage {
     await this.saveButton.click();
   }
 
-  readonly checkboxAll = this.page.locator('#selectAll');
   async checkboxOnAll() {
     await this.checkboxAll.check();
   }
