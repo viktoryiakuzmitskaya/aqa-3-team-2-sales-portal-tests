@@ -2,7 +2,6 @@ import { expect, Locator } from '@playwright/test';
 import { BasePage } from './base.page';
 import { SALES_PORTAL_URL } from 'config/environment';
 import { ROUTES } from 'config/ui-config';
-import { TIMEOUTS } from 'data/timeouts';
 
 export abstract class SalesPortalPage extends BasePage {
   abstract uniqueElement: Locator;
@@ -16,7 +15,7 @@ export abstract class SalesPortalPage extends BasePage {
   }
 
   async waitForSpinner() {
-    await expect(this.spinner).toHaveCount(0, { timeout: TIMEOUTS.SEC_10 });
+    await expect(this.spinner).toHaveCount(0);
   }
 
   async waitForNotification(text: string) {

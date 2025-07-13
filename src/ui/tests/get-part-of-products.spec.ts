@@ -1,10 +1,7 @@
-import { test as testUI } from 'ui/fixtures/ui-services.fixture';
-import { test as testAPI, expect } from 'fixtures/services.fixtures';
-import { mergeTests } from '@playwright/test';
+import { test, expect } from 'fixtures';
 import { SignInUIService } from 'ui/services/signIn.ui-serivice';
 import { ORDER_STATUSES } from 'data/orders/orders.data';
 import { RequestedProductsPage } from 'ui/pages/orders/requestedProducts.page';
-const test = mergeTests(testUI, testAPI);
 
 const orderIds: string[] = [];
 let token: string;
