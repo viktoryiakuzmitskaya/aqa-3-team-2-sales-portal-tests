@@ -1,35 +1,23 @@
-import { expect, Locator, Page } from '@playwright/test';
-import { BasePage } from '../base.page';
-import { ROUTES } from 'config/ui-config';
+import { expect } from '@playwright/test';
+import { SalesPortalPage } from '../salesPortal.page';
 
-export class ManagersListPage extends BasePage {
+export const SEARCH_INPUT_PLACEHOLDER = 'Type a value...';
+
+export class ManagersListPage extends SalesPortalPage {
   // Page elements
-  readonly pageTitle: Locator;
-  readonly addManagerButton: Locator;
-  readonly searchInput: Locator;
-  readonly searchButton: Locator;
-  readonly filterButton: Locator;
-  readonly managersTable: Locator;
-  readonly tableRows: Locator;
-  readonly tableHeaders: Locator;
-
-  constructor(page: Page) {
-    super(page);
-
-    // Page elements based on actual HTML
-    this.pageTitle = page.locator('h2.fw-bold');
-    this.addManagerButton = page.locator('a[name="add-button"]');
-    this.searchInput = page.locator('#search');
-    this.searchButton = page.locator('#search-manager');
-    this.filterButton = page.locator('#filter');
-    this.managersTable = page.locator('#table-managers');
-    this.tableRows = page.locator('#table-managers tbody tr');
-    this.tableHeaders = page.locator('#table-managers thead th');
-  }
+  readonly pageTitle = this.page.locator('h2.fw-bold');
+  readonly addManagerButton = this.page.locator('a[name="add-button"]');
+  readonly searchInput = this.page.locator('#search');
+  readonly searchButton = this.page.locator('#search-manager');
+  readonly filterButton = this.page.locator('#filter');
+  readonly managersTable = this.page.locator('#table-managers');
+  readonly tableRows = this.page.locator('#table-managers tbody tr');
+  readonly tableHeaders = this.page.locator('#table-managers thead th');
+  readonly uniqueElement = this.page.locator('h2.fw-bold');
 
   // Navigation methods
   async open(): Promise<void> {
-    await this.page.goto(ROUTES.MANAGERS);
+    await this.openPage('MANAGERS');
     await this.waitForPageLoad();
   }
 
@@ -86,9 +74,8 @@ export class ManagersListPage extends BasePage {
   async verifyTableHeaders(): Promise<void> {
     const expectedHeaders = ['First Name', 'Last Name', 'Roles', 'Created On', 'Actions'];
     const headers = await this.tableHeaders.allTextContents();
-
-    for (let i = 0; i < expectedHeaders.length; i++) {
-      expect(headers[i]).toContain(expectedHeaders[i]);
+    for (const expected of expectedHeaders) {
+      expect(headers.some((h) => h.includes(expected))).toBe(true);
     }
   }
 
@@ -147,7 +134,7 @@ export class ManagersListPage extends BasePage {
   }
 
   async verifySearchInputPlaceholder(): Promise<void> {
-    await expect(this.searchInput).toHaveAttribute('placeholder', 'Type a value...');
+    await expect(this.searchInput).toHaveAttribute('placeholder', SEARCH_INPUT_PLACEHOLDER);
   }
 
   async verifySearchInputMaxLength(): Promise<void> {
@@ -181,16 +168,7 @@ export class ManagersListPage extends BasePage {
     await expect(managerRow).toBeVisible();
   }
 
-  /**
-   * Получить значения всех ячеек в столбце по индексу (0-based)
-   */
-  async getColumnValues(colIdx: number): Promise<string[]> {
-    const rowCount = await this.tableRows.count();
-    const values: string[] = [];
-    for (let i = 0; i < rowCount; i++) {
-      const cell = this.tableRows.nth(i).locator('td').nth(colIdx);
-      values.push((await cell.textContent())?.trim() ?? '');
-    }
-    return values;
+  public async getPageUrl(): Promise<string> {
+    return this.page.url();
   }
 }

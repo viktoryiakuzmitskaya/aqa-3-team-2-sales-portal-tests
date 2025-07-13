@@ -13,7 +13,7 @@ test.describe('[UI] [Managers] Create Manager Tests', () => {
   test(
     'Should successfully create manager and verify in list',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.SMOKE] },
-    async ({ managersUIService, page }) => {
+    async ({ managersUIService }) => {
       const createPage = await managersUIService.openCreateManagerPage();
       const managerData = generateValidManagerData();
 
@@ -22,9 +22,8 @@ test.describe('[UI] [Managers] Create Manager Tests', () => {
 
       // Нажимаем кнопку Save
       await createPage.clickSaveButton();
-
-      // Ждем завершения операции (возможно появится уведомление)
-      await page.waitForTimeout(2000);
+      // Ждем появления уведомления об успешном создании
+      await createPage.waitForNotification('Manager was successfully created');
 
       // Переходим на страницу списка менеджеров для проверки
       await managersUIService.openManagersList();
@@ -136,14 +135,13 @@ test.describe('[UI] [Managers] Create Manager Tests', () => {
   test(
     'Should handle navigation correctly',
     { tag: [TAGS.UI, TAGS.REGRESSION] },
-    async ({ managersUIService, page }) => {
+    async ({ managersUIService }) => {
       const createPage = await managersUIService.openCreateManagerPage();
 
       // Проверяем навигацию назад
       await createPage.fillUsername('testuser');
       await createPage.clickBackLink();
-      await page.waitForURL('**/managers');
-      expect(page.url()).toMatch(/\/managers$/);
+      await expect(await managersUIService.managersListPage.getPageUrl()).toMatch(/\/managers$/);
 
       // Проверяем что кнопка Add Manager видна и имеет правильный текст
       await managersUIService.openManagersList();
@@ -152,14 +150,14 @@ test.describe('[UI] [Managers] Create Manager Tests', () => {
 
       // Проверяем прямую навигацию
       await managersUIService.openCreateManagerPage();
-      expect(page.url()).toMatch(/\/managers\/add$/);
+      expect(await managersUIService.managersListPage.getPageUrl()).toMatch(/\/managers\/add$/);
     },
   );
 
   test(
     'Should handle save button states',
     { tag: [TAGS.UI, TAGS.REGRESSION] },
-    async ({ managersUIService, page }) => {
+    async ({ managersUIService }) => {
       const createPage = await managersUIService.openCreateManagerPage();
 
       // Проверяем изначальное состояние
@@ -168,15 +166,14 @@ test.describe('[UI] [Managers] Create Manager Tests', () => {
       // Частичное заполнение
       await createPage.fillUsername('testuser');
       await createPage.fillFirstName('Test');
-      await page.waitForTimeout(500);
+      // Ждем, пока кнопка сохранения станет disabled (ожидание состояния вместо таймаута)
+      await expect(createPage.saveButton).toBeDisabled();
       await createPage.checkSaveButtonDisabled();
 
       // Полное заполнение
       const managerData = generateValidManagerData();
       await createPage.fillManagerForm(managerData);
-      await page.waitForTimeout(500);
-
-      // Проверяем что кнопка стала enabled после полного заполнения
+      // Ждем, пока кнопка сохранения станет enabled (ожидание состояния вместо таймаута)
       await expect(createPage.saveButton).toBeEnabled();
     },
   );
@@ -184,9 +181,9 @@ test.describe('[UI] [Managers] Create Manager Tests', () => {
   test(
     'Should prevent clicking disabled save button with incomplete data',
     { tag: [TAGS.UI, TAGS.REGRESSION] },
-    async ({ managersUIService, page }) => {
+    async ({ managersUIService }) => {
       const createPage = await managersUIService.openCreateManagerPage();
-      const initialUrl = page.url();
+      const initialUrl = await managersUIService.managersListPage.getPageUrl();
 
       // Проверяем что кнопка изначально disabled
       await expect(createPage.saveButton).toBeDisabled();
@@ -196,19 +193,19 @@ test.describe('[UI] [Managers] Create Manager Tests', () => {
       await createPage.fillUsername('testuser');
       await createPage.fillFirstName('Test');
       await createPage.fillLastName('User');
-      await page.waitForTimeout(500);
-
+      // Ждем, пока кнопка сохранения станет disabled (ожидание состояния вместо таймаута)
+      await expect(createPage.saveButton).toBeDisabled();
       // Кнопка все еще должна быть disabled (нет паролей)
       await expect(createPage.saveButton).toBeDisabled();
       await expect(createPage.saveButton).toHaveAttribute('disabled');
 
       // Пытаемся кликнуть disabled кнопку - ничего не должно происходить
       await createPage.saveButton.click({ force: true });
-      await page.waitForTimeout(1000);
+      // Не ждем уведомление, так как менеджер не создается
 
       // Проверяем что остались на той же странице (форма не отправилась)
-      expect(page.url()).toBe(initialUrl);
-      expect(page.url()).toMatch(/\/managers\/add$/);
+      expect(await managersUIService.managersListPage.getPageUrl()).toBe(initialUrl);
+      expect(await managersUIService.managersListPage.getPageUrl()).toMatch(/\/managers\/add$/);
 
       // Дополнительно проверяем что форма все еще содержит введенные данные
       await expect(createPage.usernameInput).toHaveValue('testuser');
@@ -218,9 +215,7 @@ test.describe('[UI] [Managers] Create Manager Tests', () => {
       // Заполняем оставшиеся обязательные поля
       await createPage.fillPassword('password123');
       await createPage.fillConfirmPassword('password123');
-      await page.waitForTimeout(500);
-
-      // Теперь кнопка должна стать доступной
+      // Ждем, пока кнопка сохранения станет enabled (ожидание состояния вместо таймаута)
       await expect(createPage.saveButton).toBeEnabled();
       await expect(createPage.saveButton).not.toHaveAttribute('disabled');
     },

@@ -55,7 +55,9 @@ export class RequestedProductsPage extends SalesPortalPage {
       .locator('.accordion-button', { hasText: sectionName })
       .nth(index);
     await accordionButton.click();
-    await this.page.waitForTimeout(300);
+    // Ждем появления или изменения нужного элемента вместо таймаута
+    // Например, можно ожидать появления какого-то индикатора загрузки или обновления данных
+    // await this.page.waitForSelector('selector-of-updated-element');
   }
   async clickOnReceive() {
     await this.receivButton.click();
